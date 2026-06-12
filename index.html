@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Canada vs Bosnia — Tiên Tri World Cup 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap');
+
+  :root {
+    --gold: #ffd700;
+    --red: #cc2200;
+    --canada-red: #FF0000;
+    --bosnia-blue: #002395;
+    --glow-gold: 0 0 20px #ffd700, 0 0 40px #ffd70066;
+    --glow-red: 0 0 20px #ff4400, 0 0 40px #ff440066;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #000005;
+    color: #e8d5a3;
+    font-family: 'Noto Serif', serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* STARFIELD */
+  .stars {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 0;
+  }
+  .star {
+    position: absolute; background: #fff; border-radius: 50%;
+    animation: twinkle var(--d, 3s) infinite alternate;
+  }
+  @keyframes twinkle { from { opacity: 0.2; } to { opacity: 1; } }
+
+  /* MAIN */
+  .container {
+    position: relative; z-index: 1;
+    max-width: 960px; margin: 0 auto; padding: 20px;
+  }
+
+  /* HEADER */
+  .header {
+    text-align: center; padding: 40px 20px 20px;
+    border-bottom: 1px solid #ffd70033;
+  }
+  .header-sub {
+    font-size: 0.8rem; letter-spacing: 4px; color: #ffd700aa;
+    text-transform: uppercase; margin-bottom: 10px;
+  }
+  .header h1 {
+    font-family: 'Cinzel', serif; font-size: clamp(1.4rem, 4vw, 2.8rem);
+    font-weight: 900; color: #ffd700;
+    text-shadow: var(--glow-gold);
+    line-height: 1.3;
+  }
+  .header-date {
+    margin-top: 10px; font-size: 0.85rem; color: #c8b87a;
+    letter-spacing: 2px;
+  }
+
+  /* CELESTIAL BANNER */
+  .celestial-banner {
+    background: linear-gradient(135deg, #0a0a1a 0%, #1a0a0a 50%, #0a0a1a 100%);
+    border: 1px solid #ffd70044;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 24px 0;
+    text-align: center;
+  }
+  .celestial-banner h2 {
+    font-family: 'Cinzel', serif; color: #ffd700; font-size: 1rem;
+    letter-spacing: 3px; margin-bottom: 16px;
+  }
+  .celestial-grid {
+    display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;
+  }
+  .celestial-item {
+    background: #ffffff08; border: 1px solid #ffd70033;
+    border-radius: 8px; padding: 10px 16px; font-size: 0.8rem;
+    min-width: 130px;
+  }
+  .celestial-item .label { color: #ffd700aa; font-size: 0.7rem; letter-spacing: 1px; margin-bottom: 4px; }
+  .celestial-item .value { color: #fff; font-weight: bold; }
+
+  /* SCORE BOARD */
+  .scoreboard {
+    display: flex; align-items: center; justify-content: center;
+    gap: 20px; margin: 32px 0; flex-wrap: wrap;
+  }
+  .team-card {
+    flex: 1; min-width: 220px; max-width: 300px;
+    background: linear-gradient(160deg, #0d1117 0%, #161b22 100%);
+    border-radius: 16px; padding: 24px 20px;
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .team-card.canada { border: 2px solid #FF000088; }
+  .team-card.canada::before {
+    content: ''; position: absolute; top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle, #ff000015 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .team-card.bosnia { border: 2px solid #00239588; }
+  .team-card.bosnia::before {
+    content: ''; position: absolute; top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle, #00239515 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .flag { font-size: 3rem; margin-bottom: 8px; }
+  .team-name {
+    font-family: 'Cinzel', serif; font-size: 1rem; font-weight: 700;
+    color: #fff; margin-bottom: 4px;
+  }
+  .team-element {
+    font-size: 0.75rem; color: #ffd700aa; margin-bottom: 12px;
+    letter-spacing: 1px;
+  }
+  .trigram { font-size: 2.5rem; margin: 8px 0; }
+  .trigram-name { font-size: 0.8rem; color: #e8d5a3aa; }
+
+  /* VS / SCORE */
+  .vs-block { text-align: center; min-width: 120px; }
+  .score-display {
+    font-family: 'Cinzel', serif; font-size: 4rem; font-weight: 900;
+    color: #ffd700; text-shadow: var(--glow-gold);
+    line-height: 1;
+  }
+  .score-label {
+    font-size: 0.7rem; letter-spacing: 3px; color: #ffd700aa;
+    text-transform: uppercase; margin-top: 6px;
+  }
+  .yin-yang { font-size: 2rem; margin-top: 10px; animation: spin 10s linear infinite; }
+  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+  /* SECTION TITLE */
+  .section-title {
+    font-family: 'Cinzel', serif; color: #ffd700;
+    font-size: 1rem; letter-spacing: 3px;
+    text-align: center; margin: 32px 0 16px;
+    text-shadow: var(--glow-gold);
+  }
+  .section-title::before, .section-title::after {
+    content: ' ☰ '; opacity: 0.5;
+  }
+
+  /* NGŨ HÀNH */
+  .wuxing-grid {
+    display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;
+    margin-bottom: 16px;
+  }
+  .wuxing-card {
+    width: 160px; background: #ffffff06;
+    border-radius: 12px; padding: 16px; text-align: center;
+    border: 1px solid;
+  }
+  .wuxing-card.moc  { border-color: #22cc44aa; background: #22cc4408; }
+  .wuxing-card.hoa  { border-color: #ff4400aa; background: #ff440008; }
+  .wuxing-card.tho  { border-color: #cc9900aa; background: #cc990008; }
+  .wuxing-card.kim  { border-color: #aaaaeeaa; background: #aaaaee08; }
+  .wuxing-card.thuy { border-color: #0088ffaa; background: #0088ff08; }
+  .wuxing-symbol { font-size: 2rem; margin-bottom: 6px; }
+  .wuxing-name { font-family: 'Cinzel', serif; font-size: 0.85rem; font-weight: 700; }
+  .wuxing-card.moc .wuxing-name  { color: #44ee66; }
+  .wuxing-card.hoa .wuxing-name  { color: #ff6644; }
+  .wuxing-card.tho .wuxing-name  { color: #ddbb22; }
+  .wuxing-card.kim .wuxing-name  { color: #ccccff; }
+  .wuxing-card.thuy .wuxing-name { color: #44aaff; }
+  .wuxing-desc { font-size: 0.72rem; color: #e8d5a3aa; margin-top: 6px; line-height: 1.4; }
+
+  /* BÁT QUÁI WHEEL */
+  .bagua-wrap { text-align: center; margin: 16px 0; }
+  .bagua-wheel {
+    display: inline-grid;
+    grid-template-columns: repeat(4, 80px);
+    grid-template-rows: repeat(2, 80px);
+    gap: 8px;
+    margin: 0 auto;
+  }
+  .gua {
+    background: #ffffff08; border: 1px solid #ffd70033;
+    border-radius: 50%; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    font-size: 1.4rem; cursor: default;
+    transition: all 0.3s;
+  }
+  .gua:hover { background: #ffd70022; border-color: #ffd700; transform: scale(1.1); }
+  .gua.active { background: #ffd70022; border-color: #ffd700; box-shadow: var(--glow-gold); }
+  .gua span { font-size: 0.55rem; color: #ffd700aa; margin-top: 2px; }
+
+  /* ANALYSIS TABLE */
+  .analysis-table {
+    width: 100%; border-collapse: collapse; margin: 16px 0;
+    font-size: 0.82rem;
+  }
+  .analysis-table th {
+    background: #ffd70015; color: #ffd700;
+    font-family: 'Cinzel', serif; font-size: 0.75rem;
+    letter-spacing: 2px; padding: 10px 14px;
+    border-bottom: 1px solid #ffd70044;
+    text-align: left;
+  }
+  .analysis-table td {
+    padding: 10px 14px; border-bottom: 1px solid #ffffff11;
+    vertical-align: top; line-height: 1.5;
+  }
+  .analysis-table tr:hover td { background: #ffffff06; }
+  .pos { color: #44ee66; font-weight: bold; }
+  .neg { color: #ff6644; font-weight: bold; }
+
+  /* VERDICT */
+  .verdict-box {
+    background: linear-gradient(135deg, #1a1000 0%, #2a1500 50%, #1a1000 100%);
+    border: 2px solid #ffd700;
+    border-radius: 16px; padding: 28px; margin: 24px 0;
+    text-align: center;
+    box-shadow: 0 0 40px #ffd70033;
+  }
+  .verdict-score {
+    font-family: 'Cinzel', serif; font-size: 3.5rem; font-weight: 900;
+    color: #ffd700; text-shadow: var(--glow-gold);
+    margin: 12px 0;
+  }
+  .verdict-teams {
+    font-family: 'Cinzel', serif; font-size: 1.1rem; color: #e8d5a3;
+    margin-bottom: 8px;
+  }
+  .verdict-label {
+    font-size: 0.7rem; letter-spacing: 4px; color: #ffd700aa;
+    text-transform: uppercase; margin-bottom: 16px;
+  }
+  .verdict-quote {
+    font-style: italic; color: #c8b87a; font-size: 0.85rem;
+    line-height: 1.7; max-width: 560px; margin: 0 auto;
+    border-top: 1px solid #ffd70033; padding-top: 16px; margin-top: 16px;
+  }
+
+  /* PROBABILITY BAR */
+  .prob-section { margin: 20px 0; }
+  .prob-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .prob-label { width: 160px; font-size: 0.78rem; color: #e8d5a3cc; flex-shrink: 0; }
+  .prob-bar-bg {
+    flex: 1; height: 18px; background: #ffffff0d;
+    border-radius: 9px; overflow: hidden;
+    border: 1px solid #ffffff15;
+  }
+  .prob-bar-fill {
+    height: 100%; border-radius: 9px;
+    animation: fillBar 1.5s ease-out forwards;
+  }
+  .prob-bar-fill.canada-win { background: linear-gradient(90deg, #FF000088, #ff4444); }
+  .prob-bar-fill.draw       { background: linear-gradient(90deg, #ffd70088, #ffd700); }
+  .prob-bar-fill.bosnia-win { background: linear-gradient(90deg, #00239588, #4477ff); }
+  @keyframes fillBar { from { width: 0; } }
+  .prob-pct { width: 38px; text-align: right; font-size: 0.8rem; color: #ffd700; font-weight: bold; }
+
+  /* SCORE CARDS */
+  .score-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 14px; margin: 16px 0;
+  }
+  .score-card {
+    border-radius: 14px; padding: 18px 14px;
+    text-align: center; position: relative;
+    cursor: default; transition: transform 0.25s, box-shadow 0.25s;
+    background: #0c0c18;
+  }
+  .score-card:hover { transform: translateY(-4px); }
+  .score-card.rank-1 {
+    border: 2px solid #ffd700;
+    box-shadow: 0 0 24px #ffd70044;
+  }
+  .score-card.rank-2 {
+    border: 2px solid #cc9900aa;
+    box-shadow: 0 0 12px #cc990022;
+  }
+  .score-card.rank-3 {
+    border: 2px solid #888866aa;
+  }
+  .score-card.rank-4 {
+    border: 2px solid #66666688;
+  }
+  .score-card.rank-5 {
+    border: 2px solid #44444466;
+  }
+  .sc-badge {
+    position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+    font-size: 0.62rem; font-family: 'Cinzel', serif; letter-spacing: 1px;
+    padding: 2px 10px; border-radius: 20px; white-space: nowrap;
+  }
+  .rank-1 .sc-badge { background: #ffd700; color: #000; }
+  .rank-2 .sc-badge { background: #cc9900; color: #000; }
+  .rank-3 .sc-badge { background: #555544; color: #e8d5a3; }
+  .rank-4 .sc-badge { background: #333333; color: #e8d5a3aa; }
+  .rank-5 .sc-badge { background: #222222; color: #e8d5a366; }
+  .sc-score {
+    font-family: 'Cinzel', serif; font-size: 2rem; font-weight: 900;
+    margin: 14px 0 4px; line-height: 1;
+  }
+  .rank-1 .sc-score { color: #ffd700; text-shadow: var(--glow-gold); }
+  .rank-2 .sc-score { color: #ddaa22; text-shadow: 0 0 12px #ddaa2266; }
+  .rank-3 .sc-score { color: #aaaaaa; }
+  .rank-4 .sc-score { color: #888888; }
+  .rank-5 .sc-score { color: #666666; }
+  .sc-teams {
+    font-size: 0.62rem; color: #e8d5a366; letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+  .sc-pct {
+    display: inline-block; font-size: 1rem; font-weight: bold;
+    font-family: 'Cinzel', serif;
+    margin-bottom: 8px;
+  }
+  .rank-1 .sc-pct { color: #ffd700; }
+  .rank-2 .sc-pct { color: #cc9900; }
+  .rank-3 .sc-pct { color: #888866; }
+  .rank-4 .sc-pct { color: #666655; }
+  .rank-5 .sc-pct { color: #444433; }
+  .sc-quai {
+    font-size: 1.2rem; margin-bottom: 6px;
+  }
+  .sc-desc {
+    font-size: 0.7rem; color: #e8d5a388; line-height: 1.5;
+    font-style: italic;
+  }
+  .rank-1 .sc-desc { color: #e8d5a3bb; }
+
+  /* FOOTER */
+  .footer {
+    text-align: center; padding: 32px 20px;
+    color: #e8d5a344; font-size: 0.72rem; letter-spacing: 2px;
+    border-top: 1px solid #ffd70011; margin-top: 40px;
+  }
+
+  /* DISCLAIMER */
+  .disclaimer {
+    background: #ffffff08; border: 1px dashed #ffffff22;
+    border-radius: 8px; padding: 12px 16px;
+    font-size: 0.72rem; color: #e8d5a377;
+    text-align: center; margin-top: 20px;
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+
+<!-- STARFIELD -->
+<div class="stars" id="stars"></div>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-sub">☆ FIFA World Cup 2026 — Tiên Tri Huyền Học ☆</div>
+    <h1>CANADA<br>vs<br>BOSNIA &amp; HERZEGOVINA</h1>
+    <div class="header-date">Ngày 12 tháng 6 năm Bính Ngọ · Ngày Nhâm Tý · Giờ Tuất</div>
+  </div>
+
+  <!-- CELESTIAL BANNER -->
+  <div class="celestial-banner">
+    <h2>☿ THIÊN VĂN ĐỊA LÝ</h2>
+    <div class="celestial-grid">
+      <div class="celestial-item">
+        <div class="label">CAN CHI</div>
+        <div class="value">Bính Ngọ 🐴</div>
+      </div>
+      <div class="celestial-item">
+        <div class="label">THÁNG</div>
+        <div class="value">Canh Ngọ (Tháng 5 ÂL)</div>
+      </div>
+      <div class="celestial-item">
+        <div class="label">NGÀY</div>
+        <div class="value">Nhâm Tý</div>
+      </div>
+      <div class="celestial-item">
+        <div class="label">TINH TÚ</div>
+        <div class="value">Mộc Tinh chiếu mệnh</div>
+      </div>
+      <div class="celestial-item">
+        <div class="label">NGUYỆT TƯỚNG</div>
+        <div class="value">Bán Nguyệt — Dương</div>
+      </div>
+      <div class="celestial-item">
+        <div class="label">SÂN VẬN ĐỘNG</div>
+        <div class="value">Phương Bắc — Khảm Thủy</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCOREBOARD -->
+  <div class="scoreboard">
+
+    <!-- CANADA -->
+    <div class="team-card canada">
+      <div class="flag">🇨🇦</div>
+      <div class="team-name">CANADA</div>
+      <div class="team-element">Hỏa Hành · Ly Quái · Phương Nam</div>
+      <div class="trigram">☲</div>
+      <div class="trigram-name">LY (☲) — Lửa · Rực rỡ · Chủ nhà</div>
+    </div>
+
+    <!-- VS / SCORE -->
+    <div class="vs-block">
+      <div class="score-display">2–1</div>
+      <div class="score-label">Tiên Tri</div>
+      <div class="yin-yang">☯</div>
+    </div>
+
+    <!-- BOSNIA -->
+    <div class="team-card bosnia">
+      <div class="flag">🇧🇦</div>
+      <div class="team-name">BOSNIA</div>
+      <div class="team-element">Thủy Hành · Khảm Quái · Phương Bắc</div>
+      <div class="trigram">☵</div>
+      <div class="trigram-name">KHẢM (☵) — Nước · Hiểm nguy · Khách</div>
+    </div>
+
+  </div>
+
+  <!-- NGŨ HÀNH -->
+  <div class="section-title">NGŨ HÀNH TƯƠNG SINH TƯƠNG KHẮC</div>
+  <div class="wuxing-grid">
+    <div class="wuxing-card hoa">
+      <div class="wuxing-symbol">🔥</div>
+      <div class="wuxing-name">HỎA — Canada</div>
+      <div class="wuxing-desc">Năm Bính Ngọ thuộc Hỏa. Canada mang khí Hỏa vượng, đang ở đỉnh sinh khí. Sân nhà như bếp lửa bốc cao.</div>
+    </div>
+    <div class="wuxing-card thuy">
+      <div class="wuxing-symbol">💧</div>
+      <div class="wuxing-name">THỦY — Bosnia</div>
+      <div class="wuxing-desc">Bosnia mang Thủy khí, đến từ vùng Balkan ẩm lạnh. Thủy gặp Hỏa vượng: bị đun sôi, suy yếu.</div>
+    </div>
+    <div class="wuxing-card moc">
+      <div class="wuxing-symbol">🌿</div>
+      <div class="wuxing-name">MỘC — Trận đấu</div>
+      <div class="wuxing-desc">Mộc Tinh chiếu mệnh đêm nay. Mộc sinh Hỏa: tiếp thêm lực cho Canada. Trận đấu sẽ hào hứng, nhiều bàn thắng.</div>
+    </div>
+    <div class="wuxing-card kim">
+      <div class="wuxing-symbol">⚙️</div>
+      <div class="wuxing-name">KIM — Phán xét</div>
+      <div class="wuxing-desc">Trọng tài mang Kim khí, cứng rắn, công minh. Kim khắc Mộc nhưng không đủ sức dập Hỏa vượng.</div>
+    </div>
+    <div class="wuxing-card tho">
+      <div class="wuxing-symbol">🌍</div>
+      <div class="wuxing-name">THỔ — Sân nhà</div>
+      <div class="wuxing-desc">Canada đá trên đất nhà — Thổ khí vững. Hỏa sinh Thổ, Thổ khắc Thủy: Bosnia bị đôi trùng khắc.</div>
+    </div>
+  </div>
+
+  <!-- BÁT QUÁI -->
+  <div class="section-title">BÁT QUÁI — QUẺ THIÊN ĐỊA TỴ</div>
+  <div class="bagua-wrap">
+    <div class="bagua-wheel">
+      <div class="gua active" title="Càn — Trời">☰<span>CÀN</span></div>
+      <div class="gua" title="Đoài — Đầm">☱<span>ĐOÀI</span></div>
+      <div class="gua active" title="Ly — Lửa (Canada)">☲<span>LY ★</span></div>
+      <div class="gua" title="Chấn — Sấm">☳<span>CHẤN</span></div>
+      <div class="gua" title="Tốn — Gió">☴<span>TỐN</span></div>
+      <div class="gua active" title="Khảm — Nước (Bosnia)">☵<span>KHẢM ★</span></div>
+      <div class="gua" title="Cấn — Núi">☶<span>CẤN</span></div>
+      <div class="gua" title="Khôn — Đất">☷<span>KHÔN</span></div>
+    </div>
+    <p style="font-size:0.78rem;color:#e8d5a388;margin-top:12px;font-style:italic;">
+      ★ Quẻ Hỏa Thủy Ký Tế (☲☵) — Việc đã gần xong, thành công trong tầm tay nhưng cần thận trọng
+    </p>
+  </div>
+
+  <!-- ANALYSIS TABLE -->
+  <div class="section-title">PHÂN TÍCH TOÀN DIỆN</div>
+  <table class="analysis-table">
+    <thead>
+      <tr>
+        <th>YẾU TỐ</th>
+        <th>CANADA 🇨🇦</th>
+        <th>BOSNIA 🇧🇦</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>⚽ Đội hình</td>
+        <td><span class="pos">Davies, Jonathan David, Buchanan</span> — tốc độ và ghi bàn</td>
+        <td>Demirović làm mũi nhọn, thiếu Džeko huyền thoại</td>
+      </tr>
+      <tr>
+        <td>🏟️ Sân nhà</td>
+        <td><span class="pos">+Địa lợi — Thổ vượng khí, khán giả 60.000 người</span></td>
+        <td><span class="neg">−Viễn chinh, khí Thủy bị hao tán</span></td>
+      </tr>
+      <tr>
+        <td>🔥 Ngũ Hành</td>
+        <td><span class="pos">Hỏa vượng, Mộc sinh Hỏa đêm nay</span></td>
+        <td><span class="neg">Thủy suy, Hỏa khắc Thủy</span></td>
+      </tr>
+      <tr>
+        <td>☲ Bát Quái</td>
+        <td><span class="pos">Ly Quái — sáng rực, hùng mạnh</span></td>
+        <td>Khảm Quái — hiểm trở nhưng bền bỉ</td>
+      </tr>
+      <tr>
+        <td>🌙 Thiên Văn</td>
+        <td><span class="pos">Bán Nguyệt Dương — khí thế đang lên</span></td>
+        <td>Nguyệt Kỵ ngày Nhâm, không lợi cho khách</td>
+      </tr>
+      <tr>
+        <td>🗺️ Địa lý</td>
+        <td><span class="pos">Bắc Mỹ — vùng đất Hỏa mạnh theo phong thủy</span></td>
+        <td>Vượt đại dương, mất 70% địa khí</td>
+      </tr>
+      <tr>
+        <td>🐴 Năm Bính Ngọ</td>
+        <td><span class="pos">Ngọ (Ngựa) tương hợp với sắc đỏ Canada</span></td>
+        <td>Ngọ xung Tý — Bosnia sinh năm Tý không lợi</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- XÁC SUẤT -->
+  <div class="section-title">XÁC SUẤT THIÊN MỆNH</div>
+  <div class="prob-section">
+    <div class="prob-row">
+      <div class="prob-label">🇨🇦 Canada thắng</div>
+      <div class="prob-bar-bg">
+        <div class="prob-bar-fill canada-win" style="width:62%"></div>
+      </div>
+      <div class="prob-pct">62%</div>
+    </div>
+    <div class="prob-row">
+      <div class="prob-label">🤝 Hòa</div>
+      <div class="prob-bar-bg">
+        <div class="prob-bar-fill draw" style="width:22%"></div>
+      </div>
+      <div class="prob-pct">22%</div>
+    </div>
+    <div class="prob-row">
+      <div class="prob-label">🇧🇦 Bosnia thắng</div>
+      <div class="prob-bar-bg">
+        <div class="prob-bar-fill bosnia-win" style="width:16%"></div>
+      </div>
+      <div class="prob-pct">16%</div>
+    </div>
+  </div>
+
+  <!-- SCORE CARDS -->
+  <div class="section-title">BẢNG TỈ SỐ TIÊN TRI</div>
+  <div class="score-cards-grid">
+
+    <!-- #1 Canada 2-1 -->
+    <div class="score-card rank-1">
+      <div class="sc-badge">★ CHÍNH MỆNH ★</div>
+      <div class="sc-quai">☲☵</div>
+      <div class="sc-score">2 – 1</div>
+      <div class="sc-teams">🇨🇦 CAN · BIH 🇧🇦</div>
+      <div class="sc-pct">28%</div>
+      <div class="sc-desc">Quẻ Ký Tế — Hỏa khắc Thủy. Canada thắng sát, Bosnia gỡ danh dự phút 80+. Thiên mệnh định sẵn.</div>
+    </div>
+
+    <!-- #2 Canada 1-0 -->
+    <div class="score-card rank-2">
+      <div class="sc-badge">✦ PHỤ MỆNH</div>
+      <div class="sc-quai">☳☵</div>
+      <div class="sc-score">1 – 0</div>
+      <div class="sc-teams">🇨🇦 CAN · BIH 🇧🇦</div>
+      <div class="sc-pct">18%</div>
+      <div class="sc-desc">Quẻ Chấn Khảm — Sấm dội trên nước. Canada thủ chặt, một bàn phút Ngọ (55–65) đủ định thắng.</div>
+    </div>
+
+    <!-- #3 Canada 3-1 -->
+    <div class="score-card rank-2">
+      <div class="sc-badge">✦ PHỤ MỆNH</div>
+      <div class="sc-quai">☲☶</div>
+      <div class="sc-score">3 – 1</div>
+      <div class="sc-teams">🇨🇦 CAN · BIH 🇧🇦</div>
+      <div class="sc-pct">14%</div>
+      <div class="sc-desc">Quẻ Ly Cấn — Lửa trên núi. Hỏa khí bùng cháy mạnh, Canada đại thắng khi Bosnia mở hàng thủ quá cao.</div>
+    </div>
+
+    <!-- #4 Canada 1-1 -->
+    <div class="score-card rank-3">
+      <div class="sc-badge">HÒA KHÍ</div>
+      <div class="sc-quai">☰☷</div>
+      <div class="sc-score">1 – 1</div>
+      <div class="sc-teams">🇨🇦 CAN · BIH 🇧🇦</div>
+      <div class="sc-pct">12%</div>
+      <div class="sc-desc">Quẻ Thiên Địa Bỉ — Trời đất bế tắc. Khảm Thủy bất ngờ dập được Hỏa. Hòa chí khí, chia điểm.</div>
+    </div>
+
+    <!-- #5 Canada 3-2 -->
+    <div class="score-card rank-4">
+      <div class="sc-badge">KỊCH CHIẾN</div>
+      <div class="sc-quai">☲☳</div>
+      <div class="sc-score">3 – 2</div>
+      <div class="sc-teams">🇨🇦 CAN · BIH 🇧🇦</div>
+      <div class="sc-pct">9%</div>
+      <div class="sc-desc">Quẻ Ly Chấn — Hai hổ tranh hùng. Thủy bùng lên kháng cự dữ dội, nhưng Hỏa cuối cùng vẫn thắng.</div>
+    </div>
+
+    <!-- #6 Bosnia 2-1 Canada -->
+    <div class="score-card rank-5">
+      <div class="sc-badge">NGHỊCH MỆNH</div>
+      <div class="sc-quai">☵☲</div>
+      <div class="sc-score">1 – 2</div>
+      <div class="sc-teams">🇨🇦 CAN · BIH 🇧🇦</div>
+      <div class="sc-pct">7%</div>
+      <div class="sc-desc">Quẻ Vị Tế — Thủy át Hỏa. Cực kỳ hiếm gặp. Chỉ xảy ra nếu Kim Tinh phá cục vào giờ Tý, trọng tài thiên vị.</div>
+    </div>
+
+  </div>
+
+  <!-- VERDICT -->
+  <div class="verdict-box">
+    <div class="verdict-label">☆ PHÁN QUYẾT HUYỀN HỌC ☆</div>
+    <div class="verdict-teams">Canada 🇨🇦 vs 🇧🇦 Bosnia</div>
+    <div class="verdict-score">2 – 1</div>
+    <div class="verdict-quote">
+      "Hỏa vượng Thủy suy, chủ thắng khách bại.<br>
+      Quẻ Ký Tế báo: việc thành nhưng phải cẩn thận đến phút cuối.<br>
+      Bàn thắng thứ nhất khoảng <strong>Mão Thời</strong> (giờ thứ 30–35),<br>
+      bàn thứ hai <strong>Ngọ Thời</strong> (giờ thứ 55–65),<br>
+      Bosnia gỡ một bàn danh dự <strong>Dậu Thời</strong> (giờ thứ 80+)."
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ Đây là nội dung giải trí thuần túy. Thiên văn, ngũ hành, bát quái không thể thực sự dự đoán kết quả bóng đá.
+    Đừng cá cược dựa trên bài này. Enjoy the game! ⚽
+  </div>
+
+  <div class="footer">
+    ☰ ☱ ☲ ☳ ☴ ☵ ☶ ☷ &nbsp;·&nbsp; Tiên Tri Bởi Claude Code &nbsp;·&nbsp; World Cup 2026 &nbsp;·&nbsp; ☷ ☶ ☵ ☴ ☳ ☲ ☱ ☰
+  </div>
+
+</div>
+
+<script>
+  // Generate starfield
+  const starsEl = document.getElementById('stars');
+  for (let i = 0; i < 200; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random() * 2.5 + 0.5;
+    s.style.cssText = `
+      left: ${Math.random()*100}%;
+      top: ${Math.random()*100}%;
+      width: ${size}px;
+      height: ${size}px;
+      --d: ${(Math.random()*4+1).toFixed(1)}s;
+      opacity: ${Math.random()*0.6+0.1};
+    `;
+    starsEl.appendChild(s);
+  }
+
+  // Animate probability bars on scroll
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.animationPlayState = 'running';
+      }
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('.prob-bar-fill').forEach(el => {
+    el.style.animationPlayState = 'paused';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
