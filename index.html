@@ -3,665 +3,1000 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Canada vs Bosnia — Phân Tích Chuyên Môn · WC 2026</title>
+<title>Football Analyst · World Cup 2026</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Roboto+Mono:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Roboto+Mono:wght@400;600&display=swap');
 
-  :root {
-    --bg:        #0e1117;
-    --bg2:       #161b24;
-    --bg3:       #1e2533;
-    --border:    #2a3344;
-    --text:      #d4dbe8;
-    --muted:     #7a8899;
-    --canada:    #e8192c;
-    --bosnia:    #003da5;
-    --gold:      #f5c842;
-    --green:     #2ecc71;
-    --orange:    #e67e22;
-    --red:       #e74c3c;
-  }
+:root {
+  --bg:      #0e1117;
+  --bg2:     #161b24;
+  --bg3:     #1e2533;
+  --border:  #2a3344;
+  --text:    #d4dbe8;
+  --muted:   #7a8899;
+  --gold:    #f5c842;
+  --green:   #2ecc71;
+  --orange:  #e67e22;
+  --red:     #e74c3c;
+  --blue:    #3b82f6;
+}
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; font-size:14px; line-height:1.5; }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
-    line-height: 1.6;
-  }
+/* ── TOPBAR ── */
+.topbar {
+  background:var(--bg2); border-bottom:1px solid var(--border);
+  padding:14px 24px; display:flex; align-items:center; gap:16px;
+  position:sticky; top:0; z-index:100;
+}
+.topbar-logo { font-weight:800; font-size:1rem; color:#fff; letter-spacing:-0.3px; }
+.topbar-logo span { color:var(--gold); }
+.topbar-tag {
+  font-size:10px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase;
+  padding:3px 10px; border-radius:20px; border:1px solid #f5c84244;
+  background:#f5c84211; color:var(--gold);
+}
+.topbar-right { margin-left:auto; font-size:12px; color:var(--muted); }
 
-  .wrap { max-width: 980px; margin: 0 auto; padding: 24px 20px 60px; }
+/* ── LAYOUT ── */
+.layout { display:flex; min-height:calc(100vh - 53px); }
 
-  /* HEADER */
-  .match-header {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 32px 28px 24px;
-    margin-bottom: 28px;
-    position: relative;
-    overflow: hidden;
-  }
-  .match-header::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: linear-gradient(135deg, #e8192c08 0%, transparent 50%, #003da508 100%);
-    pointer-events: none;
-  }
-  .match-meta { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
-  .tag {
-    font-size: 11px; font-weight: 600; letter-spacing: 1px;
-    padding: 3px 10px; border-radius: 20px; text-transform: uppercase;
-  }
-  .tag-wc   { background: #f5c84222; color: var(--gold);   border: 1px solid #f5c84244; }
-  .tag-grp  { background: #2ecc7122; color: var(--green);  border: 1px solid #2ecc7144; }
-  .tag-date { background: #ffffff0d; color: var(--muted);  border: 1px solid var(--border); }
+/* ── SIDEBAR ── */
+.sidebar {
+  width:200px; flex-shrink:0;
+  background:var(--bg2); border-right:1px solid var(--border);
+  padding:16px 0; position:sticky; top:53px;
+  height:calc(100vh - 53px); overflow-y:auto;
+}
+.sidebar-label {
+  font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase;
+  color:var(--muted); padding:0 16px 10px;
+}
+.day-btn {
+  display:block; width:100%; text-align:left;
+  padding:10px 16px; border:none; background:none; cursor:pointer;
+  color:var(--muted); font-family:'Inter',sans-serif; font-size:13px;
+  border-left:2px solid transparent; transition:all 0.15s;
+}
+.day-btn:hover { background:#ffffff08; color:var(--text); }
+.day-btn.active {
+  background:#f5c84210; color:var(--gold);
+  border-left-color:var(--gold); font-weight:600;
+}
+.day-btn .day-count {
+  float:right; font-size:10px; background:#ffffff0d;
+  padding:1px 6px; border-radius:10px; color:var(--muted);
+}
+.day-btn.active .day-count { background:#f5c84222; color:var(--gold); }
 
-  .teams-row {
-    display: flex; align-items: center; justify-content: space-between;
-    gap: 16px; flex-wrap: wrap;
-  }
-  .team-info { flex: 1; min-width: 160px; }
-  .team-info.right { text-align: right; }
-  .team-flag { font-size: 3rem; line-height: 1; margin-bottom: 6px; }
-  .team-fullname { font-size: 11px; color: var(--muted); letter-spacing: 0.5px; margin-bottom: 2px; }
-  .team-short { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.5px; }
-  .team-info:not(.right) .team-short { color: var(--canada); }
-  .team-info.right .team-short       { color: var(--bosnia); }
-  .team-rank { font-size: 11px; color: var(--muted); margin-top: 4px; }
-  .vs-center { text-align: center; flex-shrink: 0; }
-  .vs-text { font-size: 0.9rem; font-weight: 700; color: var(--muted); letter-spacing: 2px; }
-  .venue { font-size: 11px; color: var(--muted); margin-top: 8px; }
+/* ── MAIN ── */
+.main { flex:1; padding:24px; overflow-y:auto; }
 
-  /* SECTION LABEL */
-  .section-label {
-    font-size: 11px; font-weight: 700; letter-spacing: 2px;
-    text-transform: uppercase; color: var(--muted);
-    margin-bottom: 14px; padding-bottom: 8px;
-    border-bottom: 1px solid var(--border);
-  }
+.day-section { display:none; }
+.day-section.active { display:block; }
 
-  /* TOP 3 */
-  .top3-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 14px; margin-bottom: 28px;
-  }
-  @media (max-width: 600px) { .top3-grid { grid-template-columns: 1fr; } }
+.day-heading {
+  font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase;
+  color:var(--muted); margin-bottom:16px; padding-bottom:8px;
+  border-bottom:1px solid var(--border);
+  display:flex; align-items:center; gap:10px;
+}
+.day-heading .date-badge {
+  background:var(--gold); color:#1a1200; font-size:10px; font-weight:800;
+  padding:2px 10px; border-radius:20px; letter-spacing:1px;
+}
 
-  .pred-card {
-    background: var(--bg2); border: 1px solid var(--border);
-    border-radius: 14px; padding: 22px 18px 18px;
-    text-align: center; position: relative;
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  .pred-card:hover { transform: translateY(-3px); }
-  .pred-card.primary {
-    border-color: var(--gold);
-    box-shadow: 0 0 28px #f5c84222;
-    background: linear-gradient(160deg, #1e2533 0%, #1a1e2a 100%);
-  }
+/* ── MATCH CARD ── */
+.matches-grid {
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr));
+  gap:12px; margin-bottom:32px;
+}
+.match-card {
+  background:var(--bg2); border:1px solid var(--border);
+  border-radius:12px; padding:16px;
+  cursor:pointer; transition:all 0.2s; position:relative; overflow:hidden;
+}
+.match-card::before {
+  content:''; position:absolute; inset:0; opacity:0;
+  background:linear-gradient(135deg, #f5c84208 0%, transparent 100%);
+  transition:opacity 0.2s;
+}
+.match-card:hover { border-color:#3a4455; transform:translateY(-2px); box-shadow:0 4px 20px #00000044; }
+.match-card:hover::before { opacity:1; }
 
-  .pred-rank {
-    position: absolute; top: -11px; left: 50%; transform: translateX(-50%);
-    font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
-    padding: 3px 12px; border-radius: 20px; white-space: nowrap;
-  }
-  .primary  .pred-rank { background: var(--gold); color: #1a1200; }
-  .secondary .pred-rank { background: #7a8899; color: #0e1117; }
-  .tertiary  .pred-rank { background: #3a4455; color: var(--muted); }
+.card-top {
+  display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:14px;
+}
+.card-group { font-size:10px; font-weight:700; letter-spacing:1px; color:var(--muted); }
+.card-time { font-size:11px; color:var(--muted); font-family:'Roboto Mono',monospace; }
 
-  .pred-score {
-    font-family: 'Roboto Mono', monospace;
-    font-size: 2.6rem; font-weight: 600;
-    letter-spacing: -1px; margin: 14px 0 4px; line-height: 1;
-  }
-  .primary  .pred-score { color: var(--gold); }
-  .secondary .pred-score { color: var(--text); }
-  .tertiary  .pred-score { color: var(--muted); }
+.card-teams {
+  display:flex; align-items:center; justify-content:space-between; gap:8px;
+}
+.card-team { flex:1; }
+.card-team.right { text-align:right; }
+.card-flag { font-size:1.6rem; display:block; margin-bottom:3px; }
+.card-name { font-size:13px; font-weight:700; }
+.card-fifa { font-size:10px; color:var(--muted); }
 
-  .pred-label { font-size: 11px; color: var(--muted); margin-bottom: 14px; }
+.card-vs {
+  text-align:center; flex-shrink:0; min-width:52px;
+}
+.vs-label { font-size:10px; color:var(--muted); letter-spacing:2px; font-weight:600; }
 
-  .pred-prob {
-    display: inline-flex; align-items: center; gap: 6px;
-    border-radius: 20px; padding: 4px 12px;
-    font-size: 13px; font-weight: 700; margin-bottom: 12px;
-    border: 1px solid var(--border); background: #ffffff0a;
-  }
-  .primary  .pred-prob { color: var(--gold); border-color: #f5c84244; background: #f5c84211; }
-  .secondary .pred-prob { color: var(--text); }
-  .tertiary  .pred-prob { color: var(--muted); }
+.card-bottom {
+  margin-top:12px; padding-top:10px; border-top:1px solid #ffffff08;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.card-venue { font-size:11px; color:var(--muted); }
+.card-hint {
+  font-size:10px; color:var(--muted); display:flex; align-items:center; gap:4px;
+  opacity:0.6;
+}
 
-  .prob-bar-wrap { height: 4px; background: #ffffff0d; border-radius: 2px; margin-bottom: 14px; }
-  .prob-bar { height: 4px; border-radius: 2px; animation: grow 1.2s ease-out forwards; }
-  @keyframes grow { from { width: 0; } }
-  .primary  .prob-bar { background: var(--gold); }
-  .secondary .prob-bar { background: #7a8899; }
-  .tertiary  .prob-bar { background: #3a4455; }
+/* STATUS BADGE */
+.status-badge {
+  display:inline-block; font-size:9px; font-weight:800; letter-spacing:1.5px;
+  text-transform:uppercase; padding:2px 8px; border-radius:4px;
+}
+.status-upcoming { background:#ffffff0d; color:var(--muted); border:1px solid var(--border); }
+.status-live     { background:#e74c3c22; color:var(--red); border:1px solid #e74c3c44; animation:pulse 2s infinite; }
+.status-ft       { background:#2ecc7122; color:var(--green); border:1px solid #2ecc7144; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
 
-  .pred-reasons { text-align: left; }
-  .pred-reason-item {
-    font-size: 12px; color: var(--muted);
-    padding: 3px 0; display: flex; gap: 6px; align-items: flex-start;
-  }
-  .pred-reason-item .dot { color: var(--gold); flex-shrink: 0; margin-top: 1px; }
-  .primary .pred-reason-item { color: #a8b5c8; }
+/* TOP PICK BADGE */
+.top-pick {
+  position:absolute; top:10px; right:10px;
+  font-size:9px; font-weight:700; letter-spacing:1px; text-transform:uppercase;
+  padding:2px 8px; border-radius:4px;
+  background:var(--gold); color:#1a1200;
+}
 
-  /* SUMMARY BAR */
-  .summary-bar {
-    background: var(--bg2); border: 1px solid var(--border);
-    border-radius: 14px; padding: 20px 24px;
-    display: flex; gap: 24px; align-items: center;
-    flex-wrap: wrap; margin-bottom: 28px;
-  }
-  .summary-item { text-align: center; flex: 1; min-width: 80px; }
-  .summary-num  { font-size: 1.8rem; font-weight: 800; line-height: 1; }
-  .summary-sub  { font-size: 11px; color: var(--muted); margin-top: 3px; }
-  .summary-divider { width: 1px; height: 40px; background: var(--border); flex-shrink: 0; }
+/* ── MODAL ── */
+.modal-overlay {
+  display:none; position:fixed; inset:0; z-index:200;
+  background:#000000cc; backdrop-filter:blur(4px);
+  align-items:flex-end; justify-content:center;
+}
+.modal-overlay.open { display:flex; }
 
-  /* TWO COL */
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 28px; }
-  @media (max-width: 640px) { .two-col { grid-template-columns: 1fr; } }
+.modal {
+  background:var(--bg2); border:1px solid var(--border);
+  border-radius:20px 20px 0 0;
+  width:100%; max-width:860px;
+  max-height:90vh; overflow-y:auto;
+  padding:0 0 40px;
+  animation:slideUp 0.3s ease-out;
+}
+@keyframes slideUp { from { transform:translateY(40px); opacity:0; } to { transform:translateY(0); opacity:1; } }
 
-  /* CARD */
-  .card {
-    background: var(--bg2); border: 1px solid var(--border);
-    border-radius: 14px; padding: 20px;
-  }
-  .card-title {
-    font-size: 12px; font-weight: 700; letter-spacing: 1.5px;
-    text-transform: uppercase; color: var(--muted);
-    margin-bottom: 16px; padding-bottom: 10px;
-    border-bottom: 1px solid var(--border);
-  }
-  .card-title span { color: var(--text); }
+.modal-drag {
+  width:40px; height:4px; background:#ffffff22; border-radius:2px;
+  margin:12px auto 0;
+}
+.modal-header {
+  padding:16px 24px 20px;
+  border-bottom:1px solid var(--border);
+  position:sticky; top:0; background:var(--bg2); z-index:10;
+}
+.modal-close {
+  float:right; background:none; border:none; color:var(--muted);
+  font-size:1.4rem; cursor:pointer; line-height:1; padding:0 4px;
+}
+.modal-close:hover { color:var(--text); }
+.modal-match-title {
+  font-size:1.1rem; font-weight:800; color:#fff;
+  display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+}
+.modal-meta { font-size:11px; color:var(--muted); margin-top:4px; }
 
-  /* FORM */
-  .form-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
-  .form-team { width: 80px; font-size: 12px; font-weight: 600; }
-  .form-dots { display: flex; gap: 4px; }
-  .fdot {
-    width: 22px; height: 22px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 9px; font-weight: 700;
-  }
-  .fdot.W { background: #2ecc7133; color: var(--green); border: 1px solid #2ecc7166; }
-  .fdot.D { background: #f5c84222; color: var(--gold);  border: 1px solid #f5c84266; }
-  .fdot.L { background: #e74c3c22; color: var(--red);   border: 1px solid #e74c3c66; }
+.modal-body { padding:20px 24px 0; }
 
-  /* STAT BARS */
-  .stat-row { margin-bottom: 14px; }
-  .stat-header { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 5px; }
-  .stat-name { color: var(--muted); }
-  .stat-val-left  { font-weight: 600; color: var(--canada); }
-  .stat-val-right { font-weight: 600; color: var(--bosnia); }
-  .stat-bar-bg {
-    height: 6px; background: #ffffff0d; border-radius: 3px;
-    display: flex; overflow: hidden;
-  }
-  .stat-left  { border-radius: 3px 0 0 3px; background: var(--canada); transition: width 1s ease-out; }
-  .stat-right { border-radius: 0 3px 3px 0; background: var(--bosnia); transition: width 1s ease-out; }
+/* ── MODAL: TOP 3 ── */
+.modal-section-title {
+  font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase;
+  color:var(--muted); margin-bottom:12px; padding-bottom:8px;
+  border-bottom:1px solid var(--border);
+}
 
-  /* PLAYERS */
-  .player-item {
-    display: flex; align-items: center; gap: 10px;
-    padding: 8px 0; border-bottom: 1px solid #ffffff08;
-  }
-  .player-item:last-child { border-bottom: none; }
-  .player-num {
-    width: 24px; height: 24px; border-radius: 6px;
-    background: #ffffff0d; text-align: center; line-height: 24px;
-    font-size: 11px; font-weight: 700; color: var(--muted); flex-shrink: 0;
-  }
-  .player-name { font-size: 13px; font-weight: 600; flex: 1; }
-  .player-club { font-size: 11px; color: var(--muted); }
-  .player-rating {
-    font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 6px;
-  }
-  .rating-elite  { background: #f5c84222; color: var(--gold);   border: 1px solid #f5c84244; }
-  .rating-good   { background: #2ecc7122; color: var(--green);  border: 1px solid #2ecc7144; }
-  .rating-avg    { background: #e67e2222; color: var(--orange); border: 1px solid #e67e2244; }
+.top3-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-bottom:20px; }
+@media(max-width:520px){ .top3-row { grid-template-columns:1fr; } }
 
-  /* H2H */
-  .h2h-row {
-    display: flex; gap: 8px; align-items: center;
-    padding: 7px 0; border-bottom: 1px solid #ffffff08; font-size: 12px;
-  }
-  .h2h-row:last-child { border-bottom: none; }
-  .h2h-date  { color: var(--muted); width: 50px; flex-shrink: 0; }
-  .h2h-comp  { color: var(--muted); flex: 1; font-size: 11px; }
-  .h2h-score { font-family: 'Roboto Mono', monospace; font-weight: 600; width: 42px; text-align: center; }
-  .h2h-win-canada { color: var(--canada); }
-  .h2h-win-bosnia { color: var(--bosnia); }
-  .h2h-draw       { color: var(--gold); }
+.p-card {
+  background:var(--bg3); border:1px solid var(--border);
+  border-radius:10px; padding:14px 12px 12px;
+  text-align:center; position:relative;
+}
+.p-card.p1 { border-color:var(--gold); background:linear-gradient(160deg,#1e2533,#191d28); }
+.p-rank {
+  position:absolute; top:-9px; left:50%; transform:translateX(-50%);
+  font-size:9px; font-weight:700; letter-spacing:1px;
+  padding:2px 10px; border-radius:20px; white-space:nowrap;
+}
+.p1 .p-rank { background:var(--gold); color:#1a1200; }
+.p2 .p-rank { background:#7a8899; color:#0e1117; }
+.p3 .p-rank { background:#3a4455; color:var(--muted); }
+.p-score {
+  font-family:'Roboto Mono',monospace; font-size:2rem; font-weight:600;
+  margin:12px 0 2px; line-height:1;
+}
+.p1 .p-score { color:var(--gold); }
+.p2 .p-score { color:var(--text); }
+.p3 .p-score { color:var(--muted); }
+.p-sublabel { font-size:10px; color:var(--muted); margin-bottom:8px; }
+.p-pct {
+  font-size:13px; font-weight:700; padding:3px 10px;
+  border-radius:20px; display:inline-block; margin-bottom:8px;
+}
+.p1 .p-pct { background:#f5c84222; color:var(--gold); border:1px solid #f5c84244; }
+.p2 .p-pct { background:#ffffff0d; color:var(--text); border:1px solid var(--border); }
+.p3 .p-pct { background:#ffffff08; color:var(--muted); border:1px solid var(--border); }
+.p-bar-bg { height:3px; background:#ffffff0d; border-radius:2px; margin-bottom:10px; }
+.p-bar { height:3px; border-radius:2px; }
+.p1 .p-bar { background:var(--gold); }
+.p2 .p-bar { background:#7a8899; }
+.p3 .p-bar { background:#3a4455; }
+.p-reasons { text-align:left; }
+.p-reason { font-size:11px; color:var(--muted); display:flex; gap:5px; padding:2px 0; }
+.p-reason .dot { color:var(--gold); flex-shrink:0; }
+.p1 .p-reason { color:#a0aec0; }
 
-  /* TACTICS */
-  .tactic-box {
-    background: #ffffff06; border: 1px solid var(--border);
-    border-radius: 10px; padding: 14px; margin-bottom: 12px;
-  }
-  .tactic-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-  .tactic-formation { font-family: 'Roboto Mono', monospace; font-size: 18px; font-weight: 600; }
-  .tactic-style { font-size: 11px; color: var(--muted); }
-  .tactic-desc { font-size: 12px; color: var(--muted); line-height: 1.6; }
+/* ── MODAL: SUMMARY ── */
+.summary-strip {
+  display:flex; gap:0; background:var(--bg3); border:1px solid var(--border);
+  border-radius:10px; overflow:hidden; margin-bottom:20px;
+}
+.sum-item { flex:1; text-align:center; padding:12px 8px; border-right:1px solid var(--border); }
+.sum-item:last-child { border-right:none; }
+.sum-num { font-size:1.3rem; font-weight:800; line-height:1; }
+.sum-sub { font-size:10px; color:var(--muted); margin-top:2px; }
 
-  /* RISK */
-  .risk-grid { display: grid; gap: 10px; margin-bottom: 28px; }
-  .risk-item {
-    background: var(--bg2); border: 1px solid var(--border);
-    border-radius: 10px; padding: 16px;
-    display: flex; gap: 12px; align-items: flex-start;
-  }
-  .risk-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 1px; }
-  .risk-title { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
-  .risk-desc { font-size: 12px; color: var(--muted); line-height: 1.6; }
-  .risk-badge {
-    font-size: 10px; font-weight: 700; letter-spacing: 1px;
-    padding: 2px 8px; border-radius: 4px; margin-left: 8px; vertical-align: middle;
-  }
-  .risk-high   { background: #e74c3c22; color: var(--red);    border: 1px solid #e74c3c44; }
-  .risk-medium { background: #e67e2222; color: var(--orange); border: 1px solid #e67e2244; }
-  .risk-low    { background: #2ecc7122; color: var(--green);  border: 1px solid #2ecc7144; }
+/* ── MODAL: STATS ── */
+.stats-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px; }
+@media(max-width:520px){ .stats-grid { grid-template-columns:1fr; } }
 
-  /* FOOTER */
-  .footer {
-    text-align: center; color: var(--muted); font-size: 11px;
-    border-top: 1px solid var(--border); padding-top: 20px; margin-top: 40px;
-    letter-spacing: 0.5px;
-  }
+.stat-card { background:var(--bg3); border:1px solid var(--border); border-radius:10px; padding:14px; }
+.stat-card-title {
+  font-size:10px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase;
+  color:var(--muted); margin-bottom:12px;
+}
+.stat-row2 { margin-bottom:10px; }
+.stat-row2:last-child { margin-bottom:0; }
+.stat-head2 { display:flex; justify-content:space-between; font-size:11px; margin-bottom:4px; }
+.sh-l { font-weight:600; }
+.sh-r { font-weight:600; }
+.sh-m { color:var(--muted); }
+.stat-bar-bg2 { height:5px; background:#ffffff0d; border-radius:3px; display:flex; overflow:hidden; }
+.sbl { border-radius:3px 0 0 3px; }
+.sbr { border-radius:0 3px 3px 0; }
+
+.form-line { display:flex; align-items:center; gap:6px; margin-bottom:8px; }
+.form-line:last-child { margin-bottom:0; }
+.fl-name { width:70px; font-size:11px; font-weight:600; }
+.fdots { display:flex; gap:3px; }
+.fd {
+  width:20px; height:20px; border-radius:50%; display:flex;
+  align-items:center; justify-content:center; font-size:8px; font-weight:700;
+}
+.fd.W { background:#2ecc7133; color:var(--green); border:1px solid #2ecc7166; }
+.fd.D { background:#f5c84222; color:var(--gold);  border:1px solid #f5c84266; }
+.fd.L { background:#e74c3c22; color:var(--red);   border:1px solid #e74c3c66; }
+
+/* ── MODAL: RISK ── */
+.risk-list { display:grid; gap:8px; margin-bottom:20px; }
+.risk-item2 {
+  background:var(--bg3); border:1px solid var(--border);
+  border-radius:8px; padding:12px 14px;
+  display:flex; gap:10px;
+}
+.ri-icon { flex-shrink:0; font-size:1rem; margin-top:1px; }
+.ri-title { font-size:12px; font-weight:600; margin-bottom:2px; }
+.ri-desc { font-size:11px; color:var(--muted); line-height:1.5; }
+.risk-tag {
+  font-size:9px; font-weight:700; letter-spacing:1px; text-transform:uppercase;
+  padding:1px 6px; border-radius:3px; margin-left:6px; vertical-align:middle;
+}
+.rt-h { background:#e74c3c22; color:var(--red);    border:1px solid #e74c3c44; }
+.rt-m { background:#e67e2222; color:var(--orange); border:1px solid #e67e2244; }
+.rt-l { background:#2ecc7122; color:var(--green);  border:1px solid #2ecc7144; }
+
+/* MOBILE */
+@media(max-width:640px){
+  .sidebar { display:none; }
+  .main { padding:16px; }
+  .topbar { padding:12px 16px; }
+}
 </style>
 </head>
 <body>
-<div class="wrap">
 
-  <!-- MATCH HEADER -->
-  <div class="match-header">
-    <div class="match-meta">
-      <span class="tag tag-wc">FIFA World Cup 2026</span>
-      <span class="tag tag-grp">Bảng F · Lượt 1</span>
-      <span class="tag tag-date">12.06.2026 · 20:00 ET</span>
-    </div>
-    <div class="teams-row">
-      <div class="team-info">
-        <div class="team-flag">🇨🇦</div>
-        <div class="team-fullname">CANADA</div>
-        <div class="team-short">CAN</div>
-        <div class="team-rank">FIFA #38 · Đồng chủ nhà</div>
-      </div>
-      <div class="vs-center">
-        <div class="vs-text">VS</div>
-        <div class="venue" style="margin-top:10px;">BMO Field, Toronto<br>Sức chứa: 30,000</div>
-      </div>
-      <div class="team-info right">
-        <div class="team-flag">🇧🇦</div>
-        <div class="team-fullname">BOSNIA &amp; HERZEGOVINA</div>
-        <div class="team-short">BIH</div>
-        <div class="team-rank">FIFA #62 · Khách</div>
-      </div>
-    </div>
-  </div>
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-logo">Football<span>Analyst</span></div>
+  <div class="topbar-tag">World Cup 2026</div>
+  <div class="topbar-right">USA · Canada · Mexico</div>
+</div>
 
-  <!-- TOP 3 PREDICTIONS -->
-  <div class="section-label">Dự đoán tỉ số — Top 3 khả năng cao nhất</div>
-  <div class="top3-grid">
+<div class="layout">
 
-    <div class="pred-card primary">
-      <div class="pred-rank">★ Cao nhất</div>
-      <div class="pred-score">2 – 1</div>
-      <div class="pred-label">Canada thắng sát nút</div>
-      <div class="pred-prob">28%</div>
-      <div class="prob-bar-wrap"><div class="prob-bar" style="width:28%"></div></div>
-      <div class="pred-reasons">
-        <div class="pred-reason-item"><span class="dot">▸</span>Canada vượt trội tốc độ cánh</div>
-        <div class="pred-reason-item"><span class="dot">▸</span>Bosnia đủ sức phản công gỡ 1 bàn</div>
-        <div class="pred-reason-item"><span class="dot">▸</span>Phù hợp form gần nhất cả 2 đội</div>
-      </div>
-    </div>
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-label">Lịch thi đấu</div>
+    <div id="day-nav"></div>
+  </nav>
 
-    <div class="pred-card secondary">
-      <div class="pred-rank">2 · Khả năng cao</div>
-      <div class="pred-score">1 – 0</div>
-      <div class="pred-label">Canada thắng tối thiểu</div>
-      <div class="pred-prob">18%</div>
-      <div class="prob-bar-wrap"><div class="prob-bar" style="width:18%"></div></div>
-      <div class="pred-reasons">
-        <div class="pred-reason-item"><span class="dot">▸</span>Canada thiên thủ khi dẫn trước</div>
-        <div class="pred-reason-item"><span class="dot">▸</span>Bosnia khó tạo cơ hội rõ ràng</div>
-        <div class="pred-reason-item"><span class="dot">▸</span>Bàn thắng từ set-piece hoặc phản công nhanh</div>
-      </div>
-    </div>
-
-    <div class="pred-card tertiary">
-      <div class="pred-rank">3 · Có thể xảy ra</div>
-      <div class="pred-score">3 – 1</div>
-      <div class="pred-label">Canada thắng rõ ràng</div>
-      <div class="pred-prob">14%</div>
-      <div class="prob-bar-wrap"><div class="prob-bar" style="width:14%"></div></div>
-      <div class="pred-reasons">
-        <div class="pred-reason-item"><span class="dot">▸</span>Bosnia mở hàng thủ quá cao</div>
-        <div class="pred-reason-item"><span class="dot">▸</span>David + Davies đồng loạt nổ form</div>
-        <div class="pred-reason-item"><span class="dot">▸</span>Bosnia nhận thẻ đỏ trước hiệp 2</div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- XÁC SUẤT TỔNG -->
-  <div class="summary-bar">
-    <div class="summary-item">
-      <div class="summary-num" style="color:var(--canada)">60%</div>
-      <div class="summary-sub">Canada thắng</div>
-    </div>
-    <div class="summary-divider"></div>
-    <div class="summary-item">
-      <div class="summary-num" style="color:var(--gold)">22%</div>
-      <div class="summary-sub">Hòa</div>
-    </div>
-    <div class="summary-divider"></div>
-    <div class="summary-item">
-      <div class="summary-num" style="color:var(--bosnia)">18%</div>
-      <div class="summary-sub">Bosnia thắng</div>
-    </div>
-    <div class="summary-divider"></div>
-    <div class="summary-item">
-      <div class="summary-num" style="color:var(--text)">2.4</div>
-      <div class="summary-sub">TB bàn thắng / trận</div>
-    </div>
-    <div class="summary-divider"></div>
-    <div class="summary-item">
-      <div class="summary-num" style="color:var(--green)">68%</div>
-      <div class="summary-sub">Over 1.5 bàn</div>
-    </div>
-  </div>
-
-  <!-- FORM + H2H -->
-  <div class="two-col">
-
-    <div class="card">
-      <div class="card-title">Phong độ gần đây <span>(5 trận)</span></div>
-      <div class="form-row">
-        <div class="form-team" style="color:var(--canada)">Canada</div>
-        <div class="form-dots">
-          <div class="fdot W">W</div>
-          <div class="fdot W">W</div>
-          <div class="fdot D">D</div>
-          <div class="fdot W">W</div>
-          <div class="fdot L">L</div>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-team" style="color:var(--bosnia)">Bosnia</div>
-        <div class="form-dots">
-          <div class="fdot W">W</div>
-          <div class="fdot D">D</div>
-          <div class="fdot L">L</div>
-          <div class="fdot D">D</div>
-          <div class="fdot W">W</div>
-        </div>
-      </div>
-      <div style="margin-top:20px;">
-        <div class="stat-row">
-          <div class="stat-header">
-            <span class="stat-val-left">1.8</span>
-            <span class="stat-name">Bàn thắng / trận</span>
-            <span class="stat-val-right">1.2</span>
-          </div>
-          <div class="stat-bar-bg">
-            <div class="stat-left" style="width:60%"></div>
-            <div class="stat-right" style="width:40%"></div>
-          </div>
-        </div>
-        <div class="stat-row">
-          <div class="stat-header">
-            <span class="stat-val-left">12.4</span>
-            <span class="stat-name">Cơ hội / trận</span>
-            <span class="stat-val-right">9.1</span>
-          </div>
-          <div class="stat-bar-bg">
-            <div class="stat-left" style="width:58%"></div>
-            <div class="stat-right" style="width:42%"></div>
-          </div>
-        </div>
-        <div class="stat-row">
-          <div class="stat-header">
-            <span class="stat-val-left">54%</span>
-            <span class="stat-name">Kiểm soát bóng</span>
-            <span class="stat-val-right">46%</span>
-          </div>
-          <div class="stat-bar-bg">
-            <div class="stat-left" style="width:54%"></div>
-            <div class="stat-right" style="width:46%"></div>
-          </div>
-        </div>
-        <div class="stat-row">
-          <div class="stat-header">
-            <span class="stat-val-left">0.9</span>
-            <span class="stat-name">Bàn thua / trận</span>
-            <span class="stat-val-right">1.4</span>
-          </div>
-          <div class="stat-bar-bg">
-            <div class="stat-left" style="width:39%"></div>
-            <div class="stat-right" style="width:61%"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Lịch sử đối đầu <span>(H2H)</span></div>
-      <div class="h2h-row">
-        <span class="h2h-date">2022</span>
-        <span class="h2h-comp">Giao hữu FIFA</span>
-        <span class="h2h-score h2h-win-canada">2 – 0</span>
-        <span style="font-size:11px;color:var(--canada)">CAN</span>
-      </div>
-      <div class="h2h-row">
-        <span class="h2h-date">2019</span>
-        <span class="h2h-comp">Giao hữu FIFA</span>
-        <span class="h2h-score h2h-draw">1 – 1</span>
-        <span style="font-size:11px;color:var(--gold)">HÒA</span>
-      </div>
-      <div class="h2h-row">
-        <span class="h2h-date">2015</span>
-        <span class="h2h-comp">Giao hữu FIFA</span>
-        <span class="h2h-score h2h-win-canada">1 – 0</span>
-        <span style="font-size:11px;color:var(--canada)">CAN</span>
-      </div>
-      <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border);display:flex;gap:16px;text-align:center;">
-        <div style="flex:1">
-          <div style="font-size:1.4rem;font-weight:800;color:var(--canada)">2</div>
-          <div style="font-size:11px;color:var(--muted)">Canada thắng</div>
-        </div>
-        <div style="flex:1">
-          <div style="font-size:1.4rem;font-weight:800;color:var(--gold)">1</div>
-          <div style="font-size:11px;color:var(--muted)">Hòa</div>
-        </div>
-        <div style="flex:1">
-          <div style="font-size:1.4rem;font-weight:800;color:var(--bosnia)">0</div>
-          <div style="font-size:11px;color:var(--muted)">Bosnia thắng</div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- PLAYERS -->
-  <div class="two-col">
-
-    <div class="card">
-      <div class="card-title">Cầu thủ chủ chốt · <span style="color:var(--canada)">Canada</span></div>
-      <div class="player-item">
-        <div class="player-num">10</div>
-        <div style="flex:1">
-          <div class="player-name">Alphonso Davies</div>
-          <div class="player-club">Bayern Munich · WB trái</div>
-        </div>
-        <div class="player-rating rating-elite">9.1</div>
-      </div>
-      <div class="player-item">
-        <div class="player-num">9</div>
-        <div style="flex:1">
-          <div class="player-name">Jonathan David</div>
-          <div class="player-club">LOSC Lille · Tiền đạo</div>
-        </div>
-        <div class="player-rating rating-elite">8.7</div>
-      </div>
-      <div class="player-item">
-        <div class="player-num">11</div>
-        <div style="flex:1">
-          <div class="player-name">Tajon Buchanan</div>
-          <div class="player-club">Club Brugge · WB phải</div>
-        </div>
-        <div class="player-rating rating-good">7.8</div>
-      </div>
-      <div class="player-item">
-        <div class="player-num">8</div>
-        <div style="flex:1">
-          <div class="player-name">Stephen Eustáquio</div>
-          <div class="player-club">Porto · Tiền vệ trung tâm</div>
-        </div>
-        <div class="player-rating rating-good">7.5</div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Cầu thủ chủ chốt · <span style="color:var(--bosnia)">Bosnia</span></div>
-      <div class="player-item">
-        <div class="player-num">9</div>
-        <div style="flex:1">
-          <div class="player-name">Ermedin Demirović</div>
-          <div class="player-club">Augsburg · Tiền đạo</div>
-        </div>
-        <div class="player-rating rating-good">7.9</div>
-      </div>
-      <div class="player-item">
-        <div class="player-num">5</div>
-        <div style="flex:1">
-          <div class="player-name">Anel Ahmedhodžić</div>
-          <div class="player-club">Sheffield Utd · Trung vệ</div>
-        </div>
-        <div class="player-rating rating-good">7.4</div>
-      </div>
-      <div class="player-item">
-        <div class="player-num">7</div>
-        <div style="flex:1">
-          <div class="player-name">Dario Šaić</div>
-          <div class="player-club">Celta Vigo · Tiền vệ</div>
-        </div>
-        <div class="player-rating rating-avg">7.0</div>
-      </div>
-      <div class="player-item">
-        <div class="player-num">1</div>
-        <div style="flex:1">
-          <div class="player-name">Nikola Vasilj</div>
-          <div class="player-club">St. Pauli · Thủ môn</div>
-        </div>
-        <div class="player-rating rating-avg">7.1</div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- TACTICS -->
-  <div class="two-col">
-
-    <div class="card">
-      <div class="card-title">Chiến thuật · <span style="color:var(--canada)">Canada</span></div>
-      <div class="tactic-box">
-        <div class="tactic-header">
-          <span class="tactic-formation" style="color:var(--canada)">4 – 3 – 3</span>
-          <span class="tactic-style">Pressing cao · Chuyển trạng thái nhanh</span>
-        </div>
-        <div class="tactic-desc">Canada triển khai pressing tích cực từ 2/3 sân đối phương. Davies và Buchanan khai thác biên liên tục. Jonathan David kéo 2 trung vệ, tạo khoảng trống cho tiền vệ lao lên.</div>
-      </div>
-      <div class="tactic-box">
-        <div class="tactic-header">
-          <span class="tactic-formation" style="color:var(--green)">Điểm mạnh</span>
-        </div>
-        <div class="tactic-desc">Tốc độ chuyển hóa cao–phòng ngự cực nhanh. Sân nhà tạo động lực tâm lý. Davies là mối đe dọa thường trực ở cánh trái.</div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Chiến thuật · <span style="color:var(--bosnia)">Bosnia</span></div>
-      <div class="tactic-box">
-        <div class="tactic-header">
-          <span class="tactic-formation" style="color:var(--bosnia)">4 – 2 – 3 – 1</span>
-          <span class="tactic-style">Phòng ngự chắc · Phản công</span>
-        </div>
-        <div class="tactic-desc">Bosnia ưu tiên phòng ngự khối thấp, hai tiền vệ phòng ngự bảo vệ trung tâm. Demirović là điểm tựa trên cao, chờ bóng dài để kích hoạt phản công. Nguy hiểm nhất ở các tình huống cố định.</div>
-      </div>
-      <div class="tactic-box">
-        <div class="tactic-header">
-          <span class="tactic-formation" style="color:var(--red)">Điểm yếu</span>
-        </div>
-        <div class="tactic-desc">Thiếu chiều sâu đội hình sau Džeko. Tốc độ hàng thủ hạn chế — dễ bị Davies và Buchanan khai thác bằng bóng sau lưng.</div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- RISK ANALYSIS -->
-  <div class="section-label">Phân tích rủi ro</div>
-  <div class="risk-grid">
-
-    <div class="risk-item">
-      <div class="risk-icon">⚠️</div>
-      <div>
-        <div class="risk-title">Chấn thương Tajon Buchanan <span class="risk-badge risk-high">Cao</span></div>
-        <div class="risk-desc">Buchanan từng gãy chân đầu 2024, quá trình hồi phục kéo dài. Nếu không ra sân hoặc chưa 100%, Canada mất đi mối đe dọa quan trọng cánh phải. Cần theo dõi danh sách chính thức trước giờ bóng lăn.</div>
-      </div>
-    </div>
-
-    <div class="risk-item">
-      <div class="risk-icon">🧠</div>
-      <div>
-        <div class="risk-title">Áp lực tâm lý sân nhà — Canada <span class="risk-badge risk-medium">Trung bình</span></div>
-        <div class="risk-desc">Đây là trận World Cup đầu tiên Canada đá trên sân nhà. Kỳ vọng từ 30,000 khán giả là con dao 2 lưỡi — thúc đẩy hoặc gây căng thẳng quá mức trong những phút đầu trận.</div>
-      </div>
-    </div>
-
-    <div class="risk-item">
-      <div class="risk-icon">🃏</div>
-      <div>
-        <div class="risk-title">Bosnia chơi theo kiểu "underdog" <span class="risk-badge risk-medium">Trung bình</span></div>
-        <div class="risk-desc">Lịch sử World Cup cho thấy đội yếu hơn thường thi đấu trên kỳ vọng ở lượt 1. Bosnia không có gì để mất — có thể chơi tự do và tận dụng cơ hội bất ngờ từ set-piece hoặc sai lầm cá nhân.</div>
-      </div>
-    </div>
-
-    <div class="risk-item">
-      <div class="risk-icon">📋</div>
-      <div>
-        <div class="risk-title">Canada thiếu kinh nghiệm sân khấu lớn <span class="risk-badge risk-medium">Trung bình</span></div>
-        <div class="risk-desc">Nhiều cầu thủ Canada lần đầu dự World Cup. Qatar 2022 Canada mở màn không tốt trước khi tìm lại phong độ. Hiệu ứng tâm lý giai đoạn đầu trận là biến số khó lường.</div>
-      </div>
-    </div>
-
-    <div class="risk-item">
-      <div class="risk-icon">🌧️</div>
-      <div>
-        <div class="risk-title">Điều kiện thời tiết Toronto <span class="risk-badge risk-low">Thấp</span></div>
-        <div class="risk-desc">Toronto tháng 6 có thể mưa. Sân ướt hạn chế pressing cao của Canada, có lợi hơn cho lối chơi trực tiếp Bosnia. Tuy nhiên BMO Field có hệ thống thoát nước tốt, ảnh hưởng không đáng kể.</div>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="footer">
-    Football Analyst · World Cup 2026 · Dữ liệu tổng hợp đến 06/2026 · Chỉ mang tính tham khảo, không phải lời khuyên cá cược
-  </div>
+  <!-- MAIN -->
+  <main class="main" id="main-content"></main>
 
 </div>
 
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-drag"></div>
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModalDirect()">×</button>
+      <div class="modal-match-title" id="modal-title"></div>
+      <div class="modal-meta" id="modal-meta"></div>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
 <script>
-  // Animate stat bars
-  document.querySelectorAll('.stat-left, .stat-right').forEach(el => {
-    const w = el.style.width;
-    el.style.width = '0';
-    setTimeout(() => { el.style.width = w; }, 400);
+// ─────────────────────────────────────────
+// DATA
+// ─────────────────────────────────────────
+const MATCHES = [
+  // ─── JUNE 11 ───
+  {
+    id:'usa-jam', date:'2026-06-11', time:'19:00 ET', group:'A',
+    home:{ code:'USA', name:'USA',     flag:'🇺🇸', fifa:13 },
+    away:{ code:'JAM', name:'Jamaica', flag:'🇯🇲', fifa:55 },
+    venue:'SoFi Stadium, Los Angeles', status:'ft',
+    analysis:{
+      predictions:[
+        { score:'2-0', label:'USA thắng sạch', pct:32,
+          reasons:['Lợi thế sân nhà cực lớn','Jamaica yếu về chiều sâu đội hình','USA pressing cao hiệu quả'] },
+        { score:'3-0', label:'USA thắng đậm',  pct:18,
+          reasons:['Jamaica thiếu tốc độ phòng thủ','USA nhiều phương án tấn công','Pulisic và Reyna nổ form'] },
+        { score:'2-1', label:'USA thắng sát',  pct:15,
+          reasons:['Jamaica có thể tận dụng set-piece','Hàng thủ USA đôi khi mất tập trung','Trận mở màn áp lực tâm lý'] },
+      ],
+      winHome:74, draw:16, winAway:10,
+      avgGoals:2.6, over15:72,
+      form:{
+        home:['W','W','W','D','W'],
+        away:['W','D','L','W','D'],
+      },
+      stats:[
+        { name:'Bàn thắng/trận', l:'2.2', r:'1.1', lw:67, rw:33, lc:'#e8192c', rc:'#003da5' },
+        { name:'Cơ hội/trận',    l:'13.1',r:'8.4', lw:61, rw:39, lc:'#e8192c', rc:'#003da5' },
+        { name:'Kiểm soát bóng', l:'58%', r:'42%', lw:58, rw:42, lc:'#e8192c', rc:'#003da5' },
+      ],
+      risks:[
+        { icon:'⚠️', title:'Pulisic chấn thương nhẹ', tag:'rt-m', level:'Trung bình',
+          desc:'Pulisic có vấn đề nhỏ ở đùi trước trận. Nếu không ra sân 100%, USA giảm sức mạnh tấn công đáng kể.' },
+        { icon:'🧠', title:'Áp lực trận khai mạc', tag:'rt-l', level:'Thấp',
+          desc:'USA là chủ nhà nhưng áp lực trận đầu tiên đôi khi gây ra sự căng thẳng không cần thiết.' },
+      ],
+    }
+  },
+  {
+    id:'mex-ecu', date:'2026-06-11', time:'22:00 ET', group:'B',
+    home:{ code:'MEX', name:'Mexico',   flag:'🇲🇽', fifa:16 },
+    away:{ code:'ECU', name:'Ecuador',  flag:'🇪🇨', fifa:44 },
+    venue:'Estadio Azteca, Mexico City', status:'ft',
+    analysis:{
+      predictions:[
+        { score:'2-1', label:'Mexico thắng sát', pct:27,
+          reasons:['Mexico vượt trội về kinh nghiệm World Cup','Sân Azteca tạo áp lực kinh khủng','Ecuador chơi phản công tốt'] },
+        { score:'1-0', label:'Mexico thắng tối thiểu', pct:20,
+          reasons:['Mexico thận trọng khi dẫn trước','Ecuador phòng ngự kỷ luật','Bàn thắng từ đòn phủ đầu'] },
+        { score:'1-1', label:'Hòa',              pct:16,
+          reasons:['Ecuador đủ sức cầm chân Mexico','Trận lịch sử Ecuador hay hòa','Hai đội ra quân thận trọng'] },
+      ],
+      winHome:58, draw:24, winAway:18,
+      avgGoals:2.3, over15:65,
+      form:{
+        home:['W','W','D','W','L'],
+        away:['D','W','W','D','W'],
+      },
+      stats:[
+        { name:'Bàn thắng/trận', l:'1.8', r:'1.5', lw:55, rw:45, lc:'#006847', rc:'#FFD100' },
+        { name:'Cơ hội/trận',    l:'11.2',r:'10.1',lw:53, rw:47, lc:'#006847', rc:'#FFD100' },
+        { name:'Kiểm soát bóng', l:'52%', r:'48%', lw:52, rw:48, lc:'#006847', rc:'#FFD100' },
+      ],
+      risks:[
+        { icon:'🃏', title:'Ecuador là đội nguy hiểm', tag:'rt-m', level:'Trung bình',
+          desc:'Ecuador có phong độ ổn định trong vòng loại, lối chơi phản công nhanh có thể khai thác hàng thủ Mexico.' },
+        { icon:'📋', title:'Thế hệ Mexico đang chuyển tiếp', tag:'rt-m', level:'Trung bình',
+          desc:'Mexico đang trong giai đoạn chuyển giao thế hệ. Lớp cầu thủ mới thiếu kinh nghiệm World Cup thực chiến.' },
+      ],
+    }
+  },
+
+  // ─── JUNE 12 ───
+  {
+    id:'can-bih', date:'2026-06-12', time:'20:00 ET', group:'F',
+    home:{ code:'CAN', name:'Canada',  flag:'🇨🇦', fifa:38 },
+    away:{ code:'BIH', name:'Bosnia',  flag:'🇧🇦', fifa:62 },
+    venue:'BMO Field, Toronto', status:'live', topPick:true,
+    analysis:{
+      predictions:[
+        { score:'2-1', label:'Canada thắng sát nút', pct:28,
+          reasons:['Canada vượt trội tốc độ cánh','Bosnia đủ sức phản công gỡ 1 bàn','Phù hợp form gần nhất cả 2 đội'] },
+        { score:'1-0', label:'Canada thắng tối thiểu', pct:18,
+          reasons:['Canada thiên thủ khi dẫn trước','Bosnia khó tạo cơ hội rõ ràng','Bàn thắng từ set-piece hoặc phản công'] },
+        { score:'3-1', label:'Canada thắng rõ ràng', pct:14,
+          reasons:['Bosnia mở hàng thủ quá cao','David + Davies đồng loạt nổ form','Bosnia nhận thẻ đỏ trước hiệp 2'] },
+      ],
+      winHome:60, draw:22, winAway:18,
+      avgGoals:2.4, over15:68,
+      form:{
+        home:['W','W','D','W','L'],
+        away:['W','D','L','D','W'],
+      },
+      stats:[
+        { name:'Bàn thắng/trận', l:'1.8', r:'1.2', lw:60, rw:40, lc:'#e8192c', rc:'#003da5' },
+        { name:'Cơ hội/trận',    l:'12.4',r:'9.1', lw:58, rw:42, lc:'#e8192c', rc:'#003da5' },
+        { name:'Kiểm soát bóng', l:'54%', r:'46%', lw:54, rw:46, lc:'#e8192c', rc:'#003da5' },
+        { name:'Bàn thua/trận',  l:'0.9', r:'1.4', lw:39, rw:61, lc:'#e8192c', rc:'#003da5' },
+      ],
+      risks:[
+        { icon:'⚠️', title:'Chấn thương Tajon Buchanan', tag:'rt-h', level:'Cao',
+          desc:'Buchanan từng gãy chân đầu 2024. Nếu không ra sân 100%, Canada mất đi mối đe dọa quan trọng cánh phải.' },
+        { icon:'🧠', title:'Áp lực sân nhà — Canada', tag:'rt-m', level:'Trung bình',
+          desc:'Trận World Cup đầu tiên trên sân nhà Canada. 30,000 khán giả là con dao 2 lưỡi.' },
+        { icon:'🃏', title:'Bosnia chơi kiểu underdog', tag:'rt-m', level:'Trung bình',
+          desc:'Bosnia không có gì để mất — có thể chơi tự do và tận dụng set-piece bất ngờ.' },
+        { icon:'📋', title:'Canada thiếu kinh nghiệm sân khấu lớn', tag:'rt-m', level:'Trung bình',
+          desc:'Qatar 2022 Canada mở màn kém trước khi tìm lại phong độ. Hiệu ứng tâm lý đầu trận khó lường.' },
+      ],
+    }
+  },
+  {
+    id:'arg-chl', date:'2026-06-12', time:'22:00 ET', group:'C',
+    home:{ code:'ARG', name:'Argentina', flag:'🇦🇷', fifa:1 },
+    away:{ code:'CHL', name:'Chile',     flag:'🇨🇱', fifa:35 },
+    venue:'MetLife Stadium, New York', status:'live',
+    analysis:{
+      predictions:[
+        { score:'2-0', label:'Argentina thắng sạch', pct:30,
+          reasons:['Messi và đồng đội đang ở đỉnh form','Chile thiếu các trụ cột thế hệ vàng','Argentina ĐKVĐ WC 2022'] },
+        { score:'3-1', label:'Argentina thắng đậm', pct:22,
+          reasons:['Argentina mở đầu bằng màn trình diễn mạnh','Alvarez và Di Maria bổ sung tốt','Chile phòng ngự hở ở hai cánh'] },
+        { score:'2-1', label:'Argentina thắng sát', pct:16,
+          reasons:['Chile không hề dễ chịu tâm lý','Vargas và Sanchez vẫn nguy hiểm','Argentina đôi khi chủ quan'] },
+      ],
+      winHome:72, draw:14, winAway:14,
+      avgGoals:2.7, over15:74,
+      form:{
+        home:['W','W','W','W','D'],
+        away:['D','W','L','W','D'],
+      },
+      stats:[
+        { name:'Bàn thắng/trận', l:'2.4', r:'1.4', lw:63, rw:37, lc:'#74acdf', rc:'#d52b1e' },
+        { name:'Cơ hội/trận',    l:'14.2',r:'9.8', lw:59, rw:41, lc:'#74acdf', rc:'#d52b1e' },
+        { name:'Kiểm soát bóng', l:'62%', r:'38%', lw:62, rw:38, lc:'#74acdf', rc:'#d52b1e' },
+      ],
+      risks:[
+        { icon:'⚠️', title:'Tuổi tác của Messi', tag:'rt-l', level:'Thấp',
+          desc:'Messi 38 tuổi nhưng vẫn là nhân tố quyết định. Cần theo dõi thể lực qua 90 phút.' },
+        { icon:'🃏', title:'Chile chơi để danh dự', tag:'rt-l', level:'Thấp',
+          desc:'Chile ra sân để thể hiện, không có áp lực — đây là lợi thế tâm lý nhỏ.' },
+      ],
+    }
+  },
+
+  // ─── JUNE 13 ───
+  {
+    id:'fra-mar', date:'2026-06-13', time:'15:00 ET', group:'E',
+    home:{ code:'FRA', name:'France',  flag:'🇫🇷', fifa:2 },
+    away:{ code:'MAR', name:'Morocco', flag:'🇲🇦', fifa:14 },
+    venue:'AT&T Stadium, Dallas', status:'upcoming',
+    analysis:{
+      predictions:[
+        { score:'2-1', label:'France thắng sát',    pct:26,
+          reasons:['Mbappé ở phong độ đỉnh cao','Morocco không dễ bị khuất phục','Trận lặp lại kịch bản WC 2022'] },
+        { score:'1-0', label:'France thắng tối thiểu', pct:20,
+          reasons:['Morocco phòng ngự kỷ luật kiểu WC 2022','Griezmann chuyên ghi bàn quan trọng','France không bao giờ thắng đậm khi gặp đội mạnh'] },
+        { score:'1-1', label:'Hòa kịch tính',        pct:18,
+          reasons:['Morocco có thể lặp lại kỳ tích 2022','Hai đội đã quen nhau sau WC 2022','Trận hòa phục vụ chiến lược của cả hai'] },
+      ],
+      winHome:52, draw:26, winAway:22,
+      avgGoals:2.3, over15:63,
+      form:{
+        home:['W','D','W','W','W'],
+        away:['W','W','D','W','W'],
+      },
+      stats:[
+        { name:'Bàn thắng/trận', l:'2.0', r:'1.6', lw:56, rw:44, lc:'#002395', rc:'#c1272d' },
+        { name:'Cơ hội/trận',    l:'12.8',r:'10.4',lw:55, rw:45, lc:'#002395', rc:'#c1272d' },
+        { name:'Kiểm soát bóng', l:'57%', r:'43%', lw:57, rw:43, lc:'#002395', rc:'#c1272d' },
+      ],
+      risks:[
+        { icon:'⚠️', title:'Morocco – bức tường WC 2022', tag:'rt-h', level:'Cao',
+          desc:'Morocco từng vào bán kết WC 2022 và không thua Pháp quá cách biệt. Đây là đối trọng thực sự cho Pháp.' },
+        { icon:'🔥', title:'Mbappé dưới áp lực cực lớn', tag:'rt-m', level:'Trung bình',
+          desc:'Mbappé mang kỳ vọng rất lớn sau mùa giải xuất sắc. Áp lực này có thể ảnh hưởng đến quyết định trong vòng cấm.' },
+      ],
+    }
+  },
+  {
+    id:'bra-col', date:'2026-06-13', time:'18:00 ET', group:'D',
+    home:{ code:'BRA', name:'Brazil',   flag:'🇧🇷', fifa:5 },
+    away:{ code:'COL', name:'Colombia', flag:'🇨🇴', fifa:19 },
+    venue:'Levi\'s Stadium, San Francisco', status:'upcoming',
+    analysis:{
+      predictions:[
+        { score:'2-0', label:'Brazil thắng sạch',   pct:28,
+          reasons:['Brazil đang phục hưng sau thất bại 2022','Vinicius Jr đang ở đỉnh sự nghiệp','Colombia thường khó chịu nhưng không đủ dứt điểm'] },
+        { score:'2-1', label:'Brazil thắng sát',    pct:21,
+          reasons:['James Rodriguez vẫn còn duyên bàn thắng','Colombia có thể gỡ từ đòn phản công','Brazil đôi khi lơ là ở hiệp 2'] },
+        { score:'1-1', label:'Hòa',                  pct:15,
+          reasons:['Colombia cầm hòa Argentina 2024 Copa','Brazil thiếu sự ổn định sau WC 2022','Trận derby Nam Mỹ luôn khó đoán'] },
+      ],
+      winHome:62, draw:22, winAway:16,
+      avgGoals:2.4, over15:67,
+      form:{
+        home:['W','W','D','W','W'],
+        away:['W','W','W','D','W'],
+      },
+      stats:[
+        { name:'Bàn thắng/trận', l:'2.1', r:'1.7', lw:55, rw:45, lc:'#009c3b', rc:'#fcd116' },
+        { name:'Cơ hội/trận',    l:'13.4',r:'11.2',lw:54, rw:46, lc:'#009c3b', rc:'#fcd116' },
+        { name:'Kiểm soát bóng', l:'59%', r:'41%', lw:59, rw:41, lc:'#009c3b', rc:'#fcd116' },
+      ],
+      risks:[
+        { icon:'⚠️', title:'Brazil áp lực tái thiết', tag:'rt-m', level:'Trung bình',
+          desc:'Sau thất bại đau đớn ở WC 2022, Brazil cần chứng minh. Áp lực này có thể làm họ cứng nhắc.' },
+        { icon:'🌟', title:'James Rodriguez - wildcard', tag:'rt-m', level:'Trung bình',
+          desc:'James vẫn có thể tạo ra bàn thắng từ bất cứ đâu. Cần theo dõi thể lực sau chấn thương dài hạn.' },
+      ],
+    }
+  },
+  {
+    id:'esp-tur', date:'2026-06-13', time:'21:00 ET', group:'G',
+    home:{ code:'ESP', name:'Tây Ban Nha', flag:'🇪🇸', fifa:8 },
+    away:{ code:'TUR', name:'Thổ Nhĩ Kỳ', flag:'🇹🇷', fifa:29 },
+    venue:'Rose Bowl, Los Angeles', status:'upcoming',
+    analysis:{
+      predictions:[
+        { score:'2-0', label:'Tây Ban Nha thắng sạch', pct:31,
+          reasons:['Tây Ban Nha ĐKVĐ Euro 2024','Phong cách tiki-taka khiến Thổ Nhĩ Kỳ khó cắt bóng','Yamal và Nico Williams quá nhanh'] },
+        { score:'1-0', label:'Tây Ban Nha thắng chắc', pct:22,
+          reasons:['Thổ Nhĩ Kỳ phòng ngự kỷ luật','Tây Ban Nha không vội vàng bị lùi sâu','Bàn thắng dứt điểm là vấn đề của Tây Ban Nha'] },
+        { score:'2-1', label:'Tây Ban Nha thắng sát',  pct:14,
+          reasons:['Arda Güler có thể tạo đột biến','Thổ Nhĩ Kỳ phản công nguy hiểm','Trận Euro 2024 Thổ đã từng cho thấy sức mạnh'] },
+      ],
+      winHome:68, draw:18, winAway:14,
+      avgGoals:2.1, over15:60,
+      form:{
+        home:['W','W','W','D','W'],
+        away:['W','L','D','W','W'],
+      },
+      stats:[
+        { name:'Bàn thắng/trận', l:'2.2', r:'1.3', lw:63, rw:37, lc:'#aa151b', rc:'#e30a17' },
+        { name:'Cơ hội/trận',    l:'13.8',r:'9.2', lw:60, rw:40, lc:'#aa151b', rc:'#e30a17' },
+        { name:'Kiểm soát bóng', l:'65%', r:'35%', lw:65, rw:35, lc:'#aa151b', rc:'#e30a17' },
+      ],
+      risks:[
+        { icon:'🌟', title:'Arda Güler — thiên tài trẻ', tag:'rt-m', level:'Trung bình',
+          desc:'Tiền vệ 20 tuổi của Real Madrid có khả năng tạo ra bàn thắng từ xa bất ngờ. Tây Ban Nha cần kiểm soát anh ta.' },
+        { icon:'📋', title:'Thổ Nhĩ Kỳ đã từng đánh bại TBN ở Nations League', tag:'rt-l', level:'Thấp',
+          desc:'Hai đội đã có màn thể hiện ấn tượng ở Nations League 2024. Tây Ban Nha không thể coi thường.' },
+      ],
+    }
+  },
+
+  // ─── JUNE 14 ───
+  {
+    id:'eng-sen', date:'2026-06-14', time:'15:00 ET', group:'H',
+    home:{ code:'ENG', name:'Anh',   flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿', fifa:4 },
+    away:{ code:'SEN', name:'Senegal', flag:'🇸🇳', fifa:20 },
+    venue:'Mercedes-Benz Stadium, Atlanta', status:'upcoming',
+    analysis:{
+      predictions:[
+        { score:'2-0', label:'Anh thắng sạch',   pct:29,
+          reasons:['Bellingham dẫn đầu lối chơi kết hợp','Senegal thiếu cầu thủ đẳng cấp Mane','Anh cải thiện đáng kể từ Euro 2024'] },
+        { score:'1-0', label:'Anh thắng chắc',   pct:20,
+          reasons:['Senegal phòng ngự rất kỷ luật','Anh gặp khó với đội phòng thủ dày đặc','Bàn thắng dứt điểm duy nhất đủ thắng'] },
+        { score:'2-1', label:'Anh thắng sát',    pct:15,
+          reasons:['Senegal có Dia và Sarr ở hàng công','Anh hàng thủ đôi khi lộ khe hở','Trận khai màn luôn có biến số'] },
+      ],
+      winHome:65, draw:20, winAway:15,
+      avgGoals:2.2, over15:62,
+      form:{
+        home:['W','W','D','W','W'],
+        away:['W','D','W','L','W'],
+      },
+      stats:[
+        { name:'Bàn thắng/trận', l:'2.0', r:'1.4', lw:59, rw:41, lc:'#003078', rc:'#00853F' },
+        { name:'Cơ hội/trận',    l:'12.6',r:'9.8', lw:56, rw:44, lc:'#003078', rc:'#00853F' },
+        { name:'Kiểm soát bóng', l:'56%', r:'44%', lw:56, rw:44, lc:'#003078', rc:'#00853F' },
+      ],
+      risks:[
+        { icon:'😬', title:'Anh "It\'s coming home" pressure', tag:'rt-m', level:'Trung bình',
+          desc:'Áp lực quốc gia với Anh luôn hiện hữu. Euro 2024 thoát hiểm nhiều lần — WC 2026 kỳ vọng còn lớn hơn.' },
+        { icon:'⚡', title:'Ismaila Sarr tốc độ khó kiểm soát', tag:'rt-m', level:'Trung bình',
+          desc:'Sarr có thể khai thác hàng thủ Anh khi họ đẩy cao. Tốc độ của anh là mối lo thực sự.' },
+      ],
+    }
+  },
+  {
+    id:'ger-por', date:'2026-06-14', time:'18:00 ET', group:'I',
+    home:{ code:'GER', name:'Đức',     flag:'🇩🇪', fifa:12 },
+    away:{ code:'POR', name:'Bồ Đào Nha', flag:'🇵🇹', fifa:6 },
+    venue:'Arrowhead Stadium, Kansas City', status:'upcoming',
+    analysis:{
+      predictions:[
+        { score:'2-2', label:'Hòa kịch tính',       pct:22,
+          reasons:['Hai đội tương đương về đẳng cấp','Truyền thống derby EU luôn cân bằng','Cả hai đều có hàng công sắc bén'] },
+        { score:'2-1', label:'Đức thắng sát',        pct:20,
+          reasons:['Đức đang phục hưng sau Euro 2024 gây sốc','Musiala và Wirtz là cặp đôi nguy hiểm','Bồ Đào Nha hàng thủ không ổn định'] },
+        { score:'1-2', label:'Bồ Đào Nha thắng ngược', pct:16,
+          reasons:['Ronaldo tuyên bố WC này là cuối cùng — động lực cực cao','Bruno Fernandes điều phối xuất sắc','Đức đôi khi gục ngã bất ngờ'] },
+      ],
+      winHome:42, draw:28, winAway:30,
+      avgGoals:2.9, over15:78,
+      form:{
+        home:['W','W','D','W','L'],
+        away:['W','W','W','D','W'],
+      },
+      stats:[
+        { name:'Bàn thắng/trận', l:'2.0', r:'2.1', lw:49, rw:51, lc:'#000000', rc:'#006600' },
+        { name:'Cơ hội/trận',    l:'12.1',r:'12.8',lw:49, rw:51, lc:'#000000', rc:'#006600' },
+        { name:'Kiểm soát bóng', l:'55%', r:'45%', lw:55, rw:45, lc:'#000000', rc:'#006600' },
+      ],
+      risks:[
+        { icon:'🔥', title:'Trận cầu đinh — khó đoán nhất lượt 1', tag:'rt-h', level:'Cao',
+          desc:'Đức vs Bồ Đào Nha là trận cầu hấp dẫn nhất bảng đấu. Kết quả sẽ quyết định ngôi đầu bảng I.' },
+        { icon:'👴', title:'Ronaldo — động lực lần cuối cuộc đời', tag:'rt-m', level:'Trung bình',
+          desc:'Đây có thể là World Cup cuối của Ronaldo ở tuổi 41. Anh sẽ thi đấu với 200% cường độ.' },
+      ],
+    }
+  },
+
+  // ─── JUNE 15 ───
+  {
+    id:'ned-jap', date:'2026-06-15', time:'15:00 ET', group:'J',
+    home:{ code:'NED', name:'Hà Lan', flag:'🇳🇱', fifa:7 },
+    away:{ code:'JPN', name:'Nhật Bản', flag:'🇯🇵', fifa:18 },
+    venue:'Gillette Stadium, Boston', status:'upcoming',
+    analysis:{
+      predictions:[
+        { score:'2-1', label:'Hà Lan thắng sát',    pct:26,
+          reasons:['Van Dijk ổn định hàng thủ','Gakpo và Depay mạnh hàng công','Nhật Bản sẽ gỡ bàn từ phản công'] },
+        { score:'2-0', label:'Hà Lan thắng sạch',   pct:19,
+          reasons:['Hà Lan kiểm soát tốt trận đấu','Nhật Bản thiếu chiều cao không chiến','Hà Lan tận dụng tốt set-piece'] },
+        { score:'1-1', label:'Hòa bất ngờ',         pct:15,
+          reasons:['Nhật Bản đã từng gây sốc tại WC','Kamada và Minamino đang form tốt','Hà Lan đôi khi chủ quan với đội châu Á'] },
+      ],
+      winHome:61, draw:22, winAway:17,
+      avgGoals:2.3, over15:65,
+      form:{
+        home:['W','D','W','W','W'],
+        away:['W','W','W','D','W'],
+      },
+      stats:[
+        { name:'Bàn thắng/trận', l:'1.9', r:'1.8', lw:51, rw:49, lc:'#ae1c28', rc:'#bc002d' },
+        { name:'Cơ hội/trận',    l:'12.0',r:'11.4',lw:51, rw:49, lc:'#ae1c28', rc:'#bc002d' },
+        { name:'Kiểm soát bóng', l:'53%', r:'47%', lw:53, rw:47, lc:'#ae1c28', rc:'#bc002d' },
+      ],
+      risks:[
+        { icon:'💥', title:'Nhật Bản đã gây sốc Đức + Tây Ban Nha 2022', tag:'rt-h', level:'Cao',
+          desc:'Nhật Bản không ngại bất kỳ đối thủ nào. Họ có thể tạo ra cú sốc World Cup thứ 3 liên tiếp.' },
+        { icon:'📐', title:'Hà Lan thiếu ổn định tâm lý', tag:'rt-m', level:'Trung bình',
+          desc:'Dù tài năng cao, Hà Lan có lịch sử thua trong những trận quyết định. Cần tránh tâm lý chủ quan.' },
+      ],
+    }
+  },
+  {
+    id:'bel-sui', date:'2026-06-15', time:'18:00 ET', group:'K',
+    home:{ code:'BEL', name:'Bỉ',       flag:'🇧🇪', fifa:3 },
+    away:{ code:'SUI', name:'Thụy Sĩ',  flag:'🇨🇭', fifa:22 },
+    venue:'NRG Stadium, Houston', status:'upcoming',
+    analysis:{
+      predictions:[
+        { score:'2-0', label:'Bỉ thắng sạch',        pct:28,
+          reasons:['Thế hệ vàng mới của Bỉ đang lên','De Bruyne vẫn là kiến trúc sư hàng đầu','Thụy Sĩ phòng ngự tốt nhưng tấn công hạn chế'] },
+        { score:'1-0', label:'Bỉ thắng tối thiểu',   pct:21,
+          reasons:['Thụy Sĩ phòng ngự rất kỷ luật','Bỉ đôi khi khó tạo bàn thắng thứ 2','Granit Xhaka điều phối xuất sắc'] },
+        { score:'1-1', label:'Hòa',                   pct:17,
+          reasons:['Thụy Sĩ chưa bao giờ dễ ăn','Embolo biết khai thác điểm yếu','Bỉ đang trong giai đoạn chuyển giao'] },
+      ],
+      winHome:55, draw:25, winAway:20,
+      avgGoals:2.0, over15:58,
+      form:{
+        home:['W','W','D','W','D'],
+        away:['D','D','W','D','W'],
+      },
+      stats:[
+        { name:'Bàn thắng/trận', l:'1.7', r:'1.4', lw:55, rw:45, lc:'#000000', rc:'#d52b1e' },
+        { name:'Cơ hội/trận',    l:'11.8',r:'10.2',lw:54, rw:46, lc:'#000000', rc:'#d52b1e' },
+        { name:'Kiểm soát bóng', l:'56%', r:'44%', lw:56, rw:44, lc:'#000000', rc:'#d52b1e' },
+      ],
+      risks:[
+        { icon:'📋', title:'Bỉ mất thế hệ vàng Hazard/Lukaku', tag:'rt-m', level:'Trung bình',
+          desc:'Thế hệ De Bruyne đang cuối sự nghiệp, thế hệ mới chưa đủ chín. Giai đoạn chuyển tiếp tạo ra sự không ổn định.' },
+        { icon:'🎯', title:'Thụy Sĩ chuyên cản phá bất ngờ', tag:'rt-m', level:'Trung bình',
+          desc:'Thụy Sĩ đã loại Pháp ở vòng knock-out WC 2022. Họ là đội nguy hiểm dù bảng xếp hạng không cao.' },
+      ],
+    }
+  },
+
+  // ─── JUNE 16 ───
+  {
+    id:'ita-uru', date:'2026-06-16', time:'16:00 ET', group:'L',
+    home:{ code:'ITA', name:'Ý',       flag:'🇮🇹', fifa:9 },
+    away:{ code:'URU', name:'Uruguay', flag:'🇺🇾', fifa:17 },
+    venue:'Hard Rock Stadium, Miami', status:'upcoming',
+    analysis:{
+      predictions:[
+        { score:'1-1', label:'Hòa',                   pct:25,
+          reasons:['Hai đội đều thiên thủ','Uruguay phòng ngự rất chắc','Ý chưa ổn định sau thất bại 2022'] },
+        { score:'1-0', label:'Ý thắng tối thiểu',     pct:22,
+          reasons:['Ý sân trung lập nhưng đông fan hơn','Di Lorenzo và Donnarumma xuất sắc','Uruguay thiếu Cavani huyền thoại'] },
+        { score:'0-1', label:'Uruguay thắng bất ngờ', pct:14,
+          reasons:['Nuñez và Valverde cặp đôi nguy hiểm','Ý thủ môn vẫn còn câu hỏi','Uruguay có văn hóa không sợ đối thủ lớn'] },
+      ],
+      winHome:40, draw:34, winAway:26,
+      avgGoals:1.8, over15:52,
+      form:{
+        home:['D','W','W','D','W'],
+        away:['W','D','W','W','D'],
+      },
+      stats:[
+        { name:'Bàn thắng/trận', l:'1.4', r:'1.5', lw:48, rw:52, lc:'#009246', rc:'#5EB6E4' },
+        { name:'Cơ hội/trận',    l:'10.8',r:'10.1',lw:52, rw:48, lc:'#009246', rc:'#5EB6E4' },
+        { name:'Kiểm soát bóng', l:'54%', r:'46%', lw:54, rw:46, lc:'#009246', rc:'#5EB6E4' },
+      ],
+      risks:[
+        { icon:'💔', title:'Ý vẫn chưa phục hồi sau WC 2022', tag:'rt-h', level:'Cao',
+          desc:'Ý không tham dự WC 2018, thi đấu kém ở 2022. Áp lực phục hồi danh dự có thể tạo ra rủi ro tâm lý.' },
+        { icon:'⚡', title:'Valverde — engine không mệt mỏi', tag:'rt-m', level:'Trung bình',
+          desc:'Fede Valverde của Real Madrid là cầu thủ toàn diện nhất Uruguay. Ý cần kiểm soát anh ta xuyên suốt trận.' },
+      ],
+    }
+  },
+  {
+    id:'kor-nga', date:'2026-06-16', time:'19:00 ET', group:'A',
+    home:{ code:'KOR', name:'Hàn Quốc', flag:'🇰🇷', fifa:23 },
+    away:{ code:'NGA', name:'Nigeria',  flag:'🇳🇬', fifa:33 },
+    venue:'SoFi Stadium, Los Angeles', status:'upcoming',
+    analysis:{
+      predictions:[
+        { score:'1-1', label:'Hòa cân bằng',         pct:28,
+          reasons:['Hai đội tương đương trình độ','Son Heung-min vs Osimhen — cuộc đua bàn thắng','Trận mang tính thăm dò nhiều'] },
+        { score:'2-1', label:'Hàn Quốc thắng sát',   pct:22,
+          reasons:['Son là cầu thủ đẳng cấp cao nhất trận','Hàn Quốc ổn định hơn về chiến thuật','Nigeria thiếu kỷ luật phòng ngự ở biên'] },
+        { score:'1-2', label:'Nigeria thắng ngược',  pct:15,
+          reasons:['Osimhen là tiền đạo top châu Phi','Nigeria tốc độ hàng công rất cao','Hàn Quốc đôi khi gục ngã sau khi dẫn trước'] },
+      ],
+      winHome:42, draw:32, winAway:26,
+      avgGoals:2.4, over15:66,
+      form:{
+        home:['W','D','W','D','W'],
+        away:['W','D','L','W','D'],
+      },
+      stats:[
+        { name:'Bàn thắng/trận', l:'1.7', r:'1.6', lw:52, rw:48, lc:'#c60c30', rc:'#008751' },
+        { name:'Cơ hội/trận',    l:'11.4',r:'10.8',lw:51, rw:49, lc:'#c60c30', rc:'#008751' },
+        { name:'Kiểm soát bóng', l:'51%', r:'49%', lw:51, rw:49, lc:'#c60c30', rc:'#008751' },
+      ],
+      risks:[
+        { icon:'💥', title:'Osimhen vs Son — trận chiến cá nhân', tag:'rt-m', level:'Trung bình',
+          desc:'Hai siêu sao của hai đội đều ở đỉnh form. Ai nổ súng trước sẽ có lợi thế lớn.' },
+        { icon:'📋', title:'Nigeria thiếu ổn định chiến thuật', tag:'rt-m', level:'Trung bình',
+          desc:'Nigeria tài năng nhưng đôi khi thiếu kỷ luật chiến thuật. Hàn Quốc có thể tận dụng sự lộn xộn này.' },
+      ],
+    }
+  },
+];
+
+// ─────────────────────────────────────────
+// BUILD UI
+// ─────────────────────────────────────────
+const dateLabels = {
+  '2026-06-11': 'T5, 11/06',
+  '2026-06-12': 'T6, 12/06',
+  '2026-06-13': 'T7, 13/06',
+  '2026-06-14': 'CN, 14/06',
+  '2026-06-15': 'T2, 15/06',
+  '2026-06-16': 'T3, 16/06',
+};
+
+const statusLabel = {
+  upcoming: '<span class="status-badge status-upcoming">Sắp diễn ra</span>',
+  live:     '<span class="status-badge status-live">⬤ Live</span>',
+  ft:       '<span class="status-badge status-ft">FT</span>',
+};
+
+function groupByDate(matches){
+  const g = {};
+  matches.forEach(m => { (g[m.date] = g[m.date]||[]).push(m); });
+  return g;
+}
+
+function buildTimeline(){
+  const grouped = groupByDate(MATCHES);
+  const nav = document.getElementById('day-nav');
+  const main = document.getElementById('main-content');
+  const dates = Object.keys(grouped).sort();
+
+  dates.forEach((date, i) => {
+    const ms = grouped[date];
+    const label = dateLabels[date] || date;
+
+    // sidebar btn
+    const btn = document.createElement('button');
+    btn.className = 'day-btn' + (i===0?' active':'');
+    btn.dataset.date = date;
+    btn.innerHTML = `${label}<span class="day-count">${ms.length}</span>`;
+    btn.onclick = () => switchDay(date);
+    nav.appendChild(btn);
+
+    // section
+    const sec = document.createElement('div');
+    sec.className = 'day-section' + (i===0?' active':'');
+    sec.id = 'day-'+date;
+
+    const hasLive = ms.some(m => m.status==='live');
+    sec.innerHTML = `<div class="day-heading">
+      <span class="date-badge">${label}</span>
+      ${ms.length} trận đấu
+      ${hasLive ? '<span class="status-badge status-live" style="margin-left:auto">⬤ Live</span>' : ''}
+    </div>`;
+
+    const grid = document.createElement('div');
+    grid.className = 'matches-grid';
+    ms.forEach(m => { grid.appendChild(buildCard(m)); });
+    sec.appendChild(grid);
+    main.appendChild(sec);
   });
+}
+
+function buildCard(m){
+  const div = document.createElement('div');
+  div.className = 'match-card';
+  div.onclick = () => openModal(m.id);
+  div.innerHTML = `
+    ${m.topPick ? '<div class="top-pick">★ Phân tích đầy đủ</div>' : ''}
+    <div class="card-top">
+      <span class="card-group">Bảng ${m.group}</span>
+      <span class="card-time">${m.time}</span>
+    </div>
+    <div class="card-teams">
+      <div class="card-team">
+        <span class="card-flag">${m.home.flag}</span>
+        <div class="card-name">${m.home.code}</div>
+        <div class="card-fifa">FIFA #${m.home.fifa}</div>
+      </div>
+      <div class="card-vs">
+        ${statusLabel[m.status]}
+      </div>
+      <div class="card-team right">
+        <span class="card-flag">${m.away.flag}</span>
+        <div class="card-name">${m.away.code}</div>
+        <div class="card-fifa">FIFA #${m.away.fifa}</div>
+      </div>
+    </div>
+    <div class="card-bottom">
+      <span class="card-venue">📍 ${m.venue.split(',')[0]}</span>
+      <span class="card-hint">Xem phân tích →</span>
+    </div>
+  `;
+  return div;
+}
+
+function switchDay(date){
+  document.querySelectorAll('.day-btn').forEach(b => b.classList.toggle('active', b.dataset.date===date));
+  document.querySelectorAll('.day-section').forEach(s => s.classList.toggle('active', s.id==='day-'+date));
+}
+
+// ─────────────────────────────────────────
+// MODAL
+// ─────────────────────────────────────────
+function openModal(id){
+  const m = MATCHES.find(x => x.id===id);
+  if(!m) return;
+  const a = m.analysis;
+
+  document.getElementById('modal-title').innerHTML =
+    `${m.home.flag} ${m.home.name} <span style="color:var(--muted);font-weight:400">vs</span> ${m.away.flag} ${m.away.name}
+     ${statusLabel[m.status]}`;
+  document.getElementById('modal-meta').innerHTML =
+    `Bảng ${m.group} · ${m.time} · ${m.venue}`;
+
+  // build body
+  let html = '';
+
+  // top 3
+  html += `<div class="modal-section-title">Dự đoán tỉ số — Top 3</div>
+  <div class="top3-row">`;
+  ['p1','p2','p3'].forEach((cls, i) => {
+    const p = a.predictions[i];
+    const rankLabel = ['★ Cao nhất','2 · Khả năng cao','3 · Có thể xảy ra'][i];
+    html += `<div class="p-card ${cls}">
+      <div class="p-rank">${rankLabel}</div>
+      <div class="p-score">${p.score}</div>
+      <div class="p-sublabel">${p.label}</div>
+      <div class="p-pct">${p.pct}%</div>
+      <div class="p-bar-bg"><div class="p-bar" style="width:${p.pct}%"></div></div>
+      <div class="p-reasons">${p.reasons.map(r=>`<div class="p-reason"><span class="dot">▸</span>${r}</div>`).join('')}</div>
+    </div>`;
+  });
+  html += `</div>`;
+
+  // summary strip
+  html += `<div class="summary-strip">
+    <div class="sum-item"><div class="sum-num" style="color:var(--canada, #e8192c)">${a.winHome}%</div><div class="sum-sub">${m.home.code} thắng</div></div>
+    <div class="sum-item"><div class="sum-num" style="color:var(--gold)">${a.draw}%</div><div class="sum-sub">Hòa</div></div>
+    <div class="sum-item"><div class="sum-num" style="color:var(--blue)">${a.winAway}%</div><div class="sum-sub">${m.away.code} thắng</div></div>
+    <div class="sum-item"><div class="sum-num" style="color:var(--text)">${a.avgGoals}</div><div class="sum-sub">TB bàn thắng</div></div>
+    <div class="sum-item"><div class="sum-num" style="color:var(--green)">${a.over15}%</div><div class="sum-sub">Over 1.5</div></div>
+  </div>`;
+
+  // stats + form
+  html += `<div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-card-title">Chỉ số so sánh</div>`;
+  a.stats.forEach(s => {
+    html += `<div class="stat-row2">
+      <div class="stat-head2">
+        <span class="sh-l" style="color:${s.lc}">${s.l}</span>
+        <span class="sh-m">${s.name}</span>
+        <span class="sh-r" style="color:${s.rc}">${s.r}</span>
+      </div>
+      <div class="stat-bar-bg2">
+        <div class="sbl" style="width:${s.lw}%;background:${s.lc}88"></div>
+        <div class="sbr" style="width:${s.rw}%;background:${s.rc}88"></div>
+      </div>
+    </div>`;
+  });
+  html += `</div>
+    <div class="stat-card">
+      <div class="stat-card-title">Phong độ gần đây</div>`;
+  [['home', m.home], ['away', m.away]].forEach(([side, team]) => {
+    html += `<div class="form-line">
+      <span class="fl-name">${team.flag} ${team.code}</span>
+      <div class="fdots">${a.form[side].map(r=>`<div class="fd ${r}">${r}</div>`).join('')}</div>
+    </div>`;
+  });
+  html += `</div></div>`;
+
+  // risks
+  html += `<div class="modal-section-title">Phân tích rủi ro</div><div class="risk-list">`;
+  a.risks.forEach(r => {
+    html += `<div class="risk-item2">
+      <div class="ri-icon">${r.icon}</div>
+      <div>
+        <div class="ri-title">${r.title} <span class="risk-tag ${r.tag}">${r.level}</span></div>
+        <div class="ri-desc">${r.desc}</div>
+      </div>
+    </div>`;
+  });
+  html += `</div>`;
+
+  document.getElementById('modal-body').innerHTML = html;
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(e){
+  if(e.target === document.getElementById('modal-overlay')) closeModalDirect();
+}
+function closeModalDirect(){
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeModalDirect(); });
+
+// ─────────────────────────────────────────
+buildTimeline();
 </script>
 </body>
 </html>
